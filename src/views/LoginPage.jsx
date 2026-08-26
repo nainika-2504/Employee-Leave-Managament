@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, Eye, EyeOff, LogIn } from 'lucide-react';
 
-const BASE_URL = 'http://localhost:8085/api';
+const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8085/api';
 
 export const LoginPage = ({ onLogin }) => {
   const [email, setEmail] = useState('');
