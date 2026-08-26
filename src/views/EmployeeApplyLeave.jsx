@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { ApplyLeaveModal } from '../components/ApplyLeaveModal';
 import { LeaveCardList } from '../components/LeaveCardList';
-import { Plus, Calendar, Send } from 'lucide-react';
+import { Plus, Calendar, Send, Plane, HeartPulse, Coffee } from 'lucide-react';
 
 export const EmployeeApplyLeave = ({ currentUser, userBalances, onRefresh, showToast }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const leaveTypes = [
-    { id: 'ANNUAL', name: 'Annual Leave', icon: '🏖️', color: '#291C0E', balance: userBalances?.ANNUAL },
-    { id: 'SICK', name: 'Sick Leave', icon: '🏥', color: '#6E473B', balance: userBalances?.SICK },
-    { id: 'CASUAL', name: 'Casual Leave', icon: '☕', color: '#A78D78', balance: userBalances?.CASUAL },
+    { id: 'ANNUAL', name: 'Annual Leave', icon: <Plane size={24} />, color: '#291C0E', balance: userBalances?.ANNUAL },
+    { id: 'SICK', name: 'Sick Leave', icon: <HeartPulse size={24} />, color: '#6E473B', balance: userBalances?.SICK },
+    { id: 'CASUAL', name: 'Casual Leave', icon: <Coffee size={24} />, color: '#A78D78', balance: userBalances?.CASUAL },
   ];
 
   return (
