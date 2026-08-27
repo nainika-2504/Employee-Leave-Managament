@@ -1,5 +1,7 @@
 package com.company.elms.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
@@ -20,9 +22,15 @@ public class LeaveApplication {
     @Column(name = "leave_code")
     private String leaveCode; // display reference e.g. "LV-1001"
     
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @JsonProperty("userId")
+    public Long getUserId() {
+        return user != null ? user.getId() : null;
+    }
     
     @Column(name = "user_name")
     private String userName; // Cached user name for easy frontend loading
