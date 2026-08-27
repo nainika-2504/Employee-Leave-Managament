@@ -20,10 +20,16 @@ public class LeaveController {
     private LeaveService leaveService;
 
     @GetMapping
-    public ResponseEntity<List<LeaveApplication>> getApplications(
+    public ResponseEntity<?> getApplications(
             @RequestParam(required = false) Long userId,
             @RequestParam(required = false) String role) {
-        return ResponseEntity.ok(leaveService.getApplicationsForUser(userId, role));
+        try {
+            return ResponseEntity.ok(leaveService.getApplicationsForUser(userId, role));
+        } catch (Exception e) {
+            Map<String, String> response = new HashMap<>();
+            response.put("error", e.getMessage());
+            return ResponseEntity.internalServerError().body(response);
+        }
     }
 
     @PostMapping

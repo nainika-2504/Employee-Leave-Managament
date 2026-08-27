@@ -27,7 +27,7 @@ public class LeaveService {
     private UserRepository userRepository;
 
     public List<LeaveApplication> getApplicationsForUser(Long userId, String role) {
-        if ("MANAGER".equalsIgnoreCase(role)) {
+        if ("MANAGER".equalsIgnoreCase(role) || userId == null) {
             return leaveApplicationRepository.findAllByOrderByAppliedOnDesc();
         }
         return leaveApplicationRepository.findByUserIdOrderByAppliedOnDesc(userId);
