@@ -48,7 +48,7 @@ public class DataSeeder implements CommandLineRunner {
                 .avatar("AM")
                 .build());
 
-        User sarah = userRepository.save(User.builder()
+        userRepository.save(User.builder()
                 .name("Sarah Jenkins")
                 .email("sarah.jenkins@company.com")
                 .password("password")
