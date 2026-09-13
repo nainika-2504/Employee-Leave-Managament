@@ -1,12 +1,30 @@
 {
   "info": {
-    "name": "Employee Leave Management System (ELMS) - SRS v1.0",
-    "description": "Postman test collection for ELMS Spring Boot REST APIs",
+    "name": "ELMS - Employee Leave Management System API Suite",
+    "description": "Comprehensive Automated API Test Collection for Spring Boot 3.4.1 REST Services. Includes functional positive scenarios, validation edge cases, and automated test assertions.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8085",
+      "type": "string",
+      "description": "Base URL for ELMS backend (e.g. http://localhost:8085 or https://employee-leave-managament.onrender.com)"
+    },
+    {
+      "key": "employeeUserId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "managerName",
+      "value": "Apoorva",
+      "type": "string"
+    }
+  ],
   "item": [
     {
-      "name": "Auth - Login",
+      "name": "1. Authentication - Employee Login (Valid)",
       "request": {
         "method": "POST",
         "header": [
@@ -14,52 +32,88 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"email\": \"alex.morgan@company.com\",\n  \"password\": \"password\"\n}"
+          "raw": "{\n  \"email\": \"nainika@company.com\",\n  \"password\": \"password\"\n}"
         },
         "url": {
-          "raw": "http://localhost:8080/api/auth/login",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8085",
+          "raw": "{{baseUrl}}/api/auth/login",
+          "host": ["{{baseUrl}}"],
           "path": ["api", "auth", "login"]
         }
       }
     },
     {
-      "name": "Users - Get All Users",
+      "name": "2. Authentication - Invalid Credentials (Negative 400)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"unknown@company.com\",\n  \"password\": \"wrongpass\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/login",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "auth", "login"]
+        }
+      }
+    },
+    {
+      "name": "3. Users - Get All Users",
       "request": {
         "method": "GET",
         "url": {
-          "raw": "http://localhost:8080/api/users",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8085",
+          "raw": "{{baseUrl}}/api/users",
+          "host": ["{{baseUrl}}"],
           "path": ["api", "users"]
         }
       }
     },
     {
-      "name": "Users - Get Leave Balances for User",
+      "name": "4. Balances - Get Leave Balances for User",
       "request": {
         "method": "GET",
         "url": {
-          "raw": "http://localhost:8080/api/users/101/balances",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8085",
-          "path": ["api", "users", "101", "balances"]
+          "raw": "{{baseUrl}}/api/users/{{employeeUserId}}/balances",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "users", "{{employeeUserId}}", "balances"]
         }
       }
     },
     {
-      "name": "Leaves - Get All Leave Applications (Manager)",
+      "name": "5. Balances - Get All Team Balances (Manager View)",
       "request": {
         "method": "GET",
         "url": {
-          "raw": "http://localhost:8080/api/leaves?role=MANAGER",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8085",
+          "raw": "{{baseUrl}}/api/users/all-balances",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "users", "all-balances"]
+        }
+      }
+    },
+    {
+      "name": "6. Leaves - Get My Leaves (Employee Filter)",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/leaves?userId={{employeeUserId}}&role=EMPLOYEE",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "leaves"],
+          "query": [
+            { "key": "userId", "value": "{{employeeUserId}}" },
+            { "key": "role", "value": "EMPLOYEE" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "7. Leaves - Get All Leaves (Manager View)",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/leaves?role=MANAGER",
+          "host": ["{{baseUrl}}"],
           "path": ["api", "leaves"],
           "query": [
             { "key": "role", "value": "MANAGER" }
@@ -68,24 +122,7 @@
       }
     },
     {
-      "name": "Leaves - Get My Leave Applications (Employee)",
-      "request": {
-        "method": "GET",
-        "url": {
-          "raw": "http://localhost:8080/api/leaves?userId=101&role=EMPLOYEE",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8085",
-          "path": ["api", "leaves"],
-          "query": [
-            { "key": "userId", "value": "101" },
-            { "key": "role", "value": "EMPLOYEE" }
-          ]
-        }
-      }
-    },
-    {
-      "name": "Leaves - Submit New Leave Application",
+      "name": "8. Leaves - Submit New Leave Application",
       "request": {
         "method": "POST",
         "header": [
@@ -93,22 +130,41 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"leaveType\": \"CASUAL\",\n  \"startDate\": \"2026-09-15\",\n  \"endDate\": \"2026-09-16\",\n  \"daysCount\": 2,\n  \"reason\": \"Family emergency\"\n}"
+          "raw": "{\n  \"leaveType\": \"CASUAL\",\n  \"startDate\": \"2026-10-15\",\n  \"endDate\": \"2026-10-16\",\n  \"daysCount\": 2,\n  \"reason\": \"API Automated Test Application\"\n}"
         },
         "url": {
-          "raw": "http://localhost:8080/api/leaves?queryUserId=101",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8085",
+          "raw": "{{baseUrl}}/api/leaves?queryUserId={{employeeUserId}}",
+          "host": ["{{baseUrl}}"],
           "path": ["api", "leaves"],
           "query": [
-            { "key": "queryUserId", "value": "101" }
+            { "key": "queryUserId", "value": "{{employeeUserId}}" }
           ]
         }
       }
     },
     {
-      "name": "Leaves - Review / Approve Leave Request",
+      "name": "9. Leaves - Submit Leave Exceeding Quota (Negative 400)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"leaveType\": \"CASUAL\",\n  \"startDate\": \"2026-11-01\",\n  \"endDate\": \"2026-11-20\",\n  \"daysCount\": 999,\n  \"reason\": \"Testing quota violation failure\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/leaves?queryUserId={{employeeUserId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "leaves"],
+          "query": [
+            { "key": "queryUserId", "value": "{{employeeUserId}}" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "10. Leaves - Review / Approve Leave Request",
       "request": {
         "method": "PUT",
         "header": [
@@ -116,16 +172,31 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"status\": \"APPROVED\",\n  \"reviewerComments\": \"Approved by Engineering Lead.\"\n}"
+          "raw": "{\n  \"status\": \"APPROVED\",\n  \"reviewerComments\": \"Approved for API verification demonstration.\"\n}"
         },
         "url": {
-          "raw": "http://localhost:8080/api/leaves/LV-1001/review?queryReviewerName=Sarah%20Jenkins",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8080",
-          "path": ["api", "leaves", "LV-1001", "review"],
+          "raw": "{{baseUrl}}/api/leaves/1/review?queryReviewerName={{managerName}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "leaves", "1", "review"],
           "query": [
-            { "key": "queryReviewerName", "value": "Sarah Jenkins" }
+            { "key": "queryReviewerName", "value": "{{managerName}}" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "11. Leaves - Cancel Leave Application (Employee)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/leaves/2/cancel?queryUserId=2",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "leaves", "2", "cancel"],
+          "query": [
+            { "key": "queryUserId", "value": "2" }
           ]
         }
       }

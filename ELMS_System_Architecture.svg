@@ -1,0 +1,157 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 680" width="100%" height="100%">
+  <defs>
+    <style>
+      .hdr-title { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; font-size: 16px; font-weight: 700; fill: #ffffff; }
+      .hdr-sub { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; font-size: 12px; font-weight: 400; fill: #94a3b8; }
+      .tier-title { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; font-size: 14px; font-weight: 700; }
+      .card-title { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; font-size: 12px; font-weight: 700; }
+      .card-text { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; font-size: 11px; font-weight: 400; fill: #475569; }
+      .card-sub { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; font-size: 10px; font-weight: 400; }
+      .conn-text { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; font-size: 11px; font-weight: 700; }
+      .footer-text { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; font-size: 11px; font-weight: 600; fill: #475569; }
+    </style>
+    <filter id="softShadow" x="-2%" y="-2%" width="104%" height="105%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-opacity="0.07"/>
+    </filter>
+    <marker id="arrowBlue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#2563eb"/>
+    </marker>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#16a34a"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="680" fill="#f8fafc"/>
+
+  <!-- Header Banner -->
+  <rect x="50" y="25" width="1100" height="60" rx="10" fill="#0f172a" filter="url(#softShadow)"/>
+  <text x="600" y="50" text-anchor="middle" class="hdr-title">EMPLOYEE LEAVE MANAGEMENT SYSTEM (ELMS)</text>
+  <text x="600" y="70" text-anchor="middle" class="hdr-sub">3-Tier Enterprise Architecture (React 18 SPA • Spring Boot 3.4 REST Services • PostgreSQL 17.6)</text>
+
+  <!-- ================= TIER 1: CLIENT TIER ================= -->
+  <rect x="50" y="110" width="320" height="470" rx="12" fill="#eff6ff" stroke="#3b82f6" stroke-width="2" filter="url(#softShadow)"/>
+  
+  <!-- Tier 1 Header -->
+  <rect x="50" y="110" width="320" height="42" rx="12" fill="#3b82f6"/>
+  <rect x="50" y="140" width="320" height="12" fill="#3b82f6"/>
+  <text x="210" y="136" text-anchor="middle" fill="#ffffff" class="tier-title">1. PRESENTATION TIER</text>
+
+  <!-- Box 1: Actors -->
+  <rect x="70" y="165" width="280" height="52" rx="8" fill="#ffffff" stroke="#bfdbfe"/>
+  <text x="85" y="186" fill="#1e3a8a" class="card-title">👨‍💼 Users (Employees &amp; Managers)</text>
+  <text x="85" y="204" class="card-text">Access via Web Browsers (Desktop &amp; Mobile)</text>
+
+  <!-- Box 2: React SPA -->
+  <rect x="70" y="228" width="280" height="95" rx="8" fill="#ffffff" stroke="#bfdbfe"/>
+  <text x="85" y="249" fill="#1e40af" class="card-title">React 18 Single Page App (Vite)</text>
+  <text x="85" y="268" class="card-text">• Role-based view authorization</text>
+  <text x="85" y="286" class="card-text">• Client-side date math &amp; quota check</text>
+  <text x="85" y="304" class="card-text">• State management &amp; Toast alerts</text>
+
+  <!-- Box 3: Modules -->
+  <rect x="70" y="334" width="280" height="100" rx="8" fill="#ffffff" stroke="#bfdbfe"/>
+  <text x="85" y="355" fill="#1e3a8a" class="card-title">Core Frontend Views</text>
+  <text x="85" y="373" class="card-text">• Employee Dashboard &amp; My Leaves</text>
+  <text x="85" y="391" class="card-text">• Apply Leave Modal (Dynamic duration)</text>
+  <text x="85" y="409" class="card-text">• Manager Approval Queue</text>
+  <text x="85" y="425" class="card-text">• Department Monthly Calendar</text>
+
+  <!-- Box 4: Hosting -->
+  <rect x="70" y="445" width="280" height="55" rx="8" fill="#dbeafe" stroke="#60a5fa"/>
+  <text x="85" y="467" fill="#1e40af" class="card-title">☁️ Hosted on Vercel Edge CDN</text>
+  <text x="85" y="486" fill="#1e3a8a" class="card-sub">Automated HTTPS • Continuous Git deployment</text>
+
+
+  <!-- ================= CONNECTOR 1 -> 2 ================= -->
+  <line x1="370" y1="345" x2="432" y2="345" stroke="#2563eb" stroke-width="3" marker-end="url(#arrowBlue)"/>
+  <rect x="375" y="285" width="58" height="50" rx="6" fill="#eff6ff" stroke="#2563eb"/>
+  <text x="404" y="303" text-anchor="middle" fill="#1d4ed8" class="conn-text">HTTPS</text>
+  <text x="404" y="318" text-anchor="middle" fill="#1d4ed8" class="conn-text">REST</text>
+  <text x="404" y="330" text-anchor="middle" fill="#1e40af" font-size="9">JSON</text>
+
+
+  <!-- ================= TIER 2: APPLICATION TIER ================= -->
+  <rect x="440" y="110" width="320" height="470" rx="12" fill="#f0fdf4" stroke="#16a34a" stroke-width="2" filter="url(#softShadow)"/>
+  
+  <!-- Tier 2 Header -->
+  <rect x="440" y="110" width="320" height="42" rx="12" fill="#16a34a"/>
+  <rect x="440" y="140" width="320" height="12" fill="#16a34a"/>
+  <text x="600" y="136" text-anchor="middle" fill="#ffffff" class="tier-title">2. APPLICATION TIER</text>
+
+  <!-- Box 1: Controllers -->
+  <rect x="460" y="165" width="280" height="85" rx="8" fill="#ffffff" stroke="#bbf7d0"/>
+  <text x="475" y="186" fill="#15803d" class="card-title">REST Controllers (Spring Boot)</text>
+  <text x="475" y="205" class="card-text">• AuthController: /api/auth, /api/users</text>
+  <text x="475" y="223" class="card-text">• LeaveController: /api/leaves</text>
+  <text x="475" y="241" class="card-text">• CORS &amp; DTO Request Validation</text>
+
+  <!-- Box 2: Services -->
+  <rect x="460" y="260" width="280" height="85" rx="8" fill="#ffffff" stroke="#bbf7d0"/>
+  <text x="475" y="281" fill="#15803d" class="card-title">Service Layer (@Transactional)</text>
+  <text x="475" y="300" class="card-text">• LeaveService &amp; UserService</text>
+  <text x="475" y="318" class="card-text">• Workflow: Pending ➔ Approved / Cancel</text>
+  <text x="475" y="336" class="card-text">• Strict Quota &amp; Date boundary rules</text>
+
+  <!-- Box 3: Deduction Engine -->
+  <rect x="460" y="355" width="280" height="52" rx="8" fill="#fef3c7" stroke="#f59e0b"/>
+  <text x="475" y="375" fill="#92400e" class="card-title">⚡ Auto-Deduction Engine</text>
+  <text x="475" y="394" fill="#b45309" class="card-sub">Atomic update on approval: used += days, remaining -= days</text>
+
+  <!-- Box 4: Hosting -->
+  <rect x="460" y="418" width="280" height="52" rx="8" fill="#dcfce7" stroke="#4ade80"/>
+  <text x="475" y="440" fill="#166534" class="card-title">☁️ Render Cloud Web Service</text>
+  <text x="475" y="458" fill="#14532d" class="card-sub">Multi-stage Docker container • Java 21 JRE • Port 8085</text>
+
+  <!-- Box 5: JPA -->
+  <rect x="460" y="478" width="280" height="28" rx="6" fill="#ffffff" stroke="#cbd5e1"/>
+  <text x="600" y="496" text-anchor="middle" fill="#64748b" class="card-sub">Spring Data JPA / Hibernate ORM</text>
+
+
+  <!-- ================= CONNECTOR 2 -> 3 ================= -->
+  <line x1="760" y1="345" x2="822" y2="345" stroke="#16a34a" stroke-width="3" marker-end="url(#arrowGreen)"/>
+  <rect x="765" y="285" width="58" height="50" rx="6" fill="#f0fdf4" stroke="#16a34a"/>
+  <text x="794" y="303" text-anchor="middle" fill="#15803d" class="conn-text">JDBC</text>
+  <text x="794" y="318" text-anchor="middle" fill="#15803d" class="conn-text">MySQL</text>
+  <text x="794" y="330" text-anchor="middle" fill="#14532d" font-size="9">:3306</text>
+
+
+  <!-- ================= TIER 3: DATA TIER ================= -->
+  <rect x="830" y="110" width="320" height="470" rx="12" fill="#faf5ff" stroke="#a855f7" stroke-width="2" filter="url(#softShadow)"/>
+  
+  <!-- Tier 3 Header -->
+  <rect x="830" y="110" width="320" height="42" rx="12" fill="#a855f7"/>
+  <rect x="830" y="140" width="320" height="12" fill="#a855f7"/>
+  <text x="990" y="136" text-anchor="middle" fill="#ffffff" class="tier-title">3. DATA TIER (MySQL)</text>
+
+  <!-- Box 1: Pooler -->
+  <rect x="850" y="165" width="280" height="48" rx="8" fill="#f3e8ff" stroke="#d8b4fe"/>
+  <text x="865" y="185" fill="#6b21a8" class="card-title">Connection Pool: HikariCP</text>
+  <text x="865" y="202" fill="#7e22ce" class="card-sub">Max Pool Size: 10 (Optimized for MySQL)</text>
+
+  <!-- Box 2: Database -->
+  <rect x="850" y="222" width="280" height="52" rx="8" fill="#ffffff" stroke="#e9d5ff"/>
+  <text x="865" y="243" fill="#581c87" class="card-title">MySQL 8.0 Relational Engine</text>
+  <text x="865" y="261" class="card-text">Database: elms_db (InnoDB Engine)</text>
+
+  <!-- Box 3: Tables -->
+  <rect x="850" y="284" width="280" height="160" rx="8" fill="#ffffff" stroke="#e9d5ff"/>
+  <text x="865" y="305" fill="#581c87" class="card-title">Relational Tables &amp; Relations</text>
+  <text x="865" y="325" fill="#0f172a" class="card-title">📋 users</text>
+  <text x="865" y="340" class="card-sub">id (PK), name, email, password, role, department</text>
+  <text x="865" y="360" fill="#0f172a" class="card-title">📊 leave_balances</text>
+  <text x="865" y="375" class="card-sub">user_id (FK), leave_type, total, used, remaining</text>
+  <text x="865" y="395" fill="#0f172a" class="card-title">📝 leave_applications</text>
+  <text x="865" y="410" class="card-sub">user_id (FK), dates, days, reason, status, review</text>
+  <text x="865" y="430" fill="#a855f7" class="card-sub">1 : N Cascading relationships via user_id</text>
+
+  <!-- Box 4: Security -->
+  <rect x="850" y="454" width="280" height="52" rx="8" fill="#f3e8ff" stroke="#d8b4fe"/>
+  <text x="865" y="474" fill="#6b21a8" class="card-title">🔒 Credential Security</text>
+  <text x="865" y="492" fill="#7e22ce" class="card-sub">Encrypted environment variables • Zero hardcoded keys</text>
+
+
+  <!-- ================= FOOTER ================= -->
+  <rect x="50" y="595" width="1100" height="48" rx="8" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="600" y="624" text-anchor="middle" class="footer-text">🔄 Automated CI/CD Pipeline: GitHub (Source) ➔ Vercel (Edge Frontend Build) ➔ Render (Docker Java 21 Backend Build)</text>
+</svg>

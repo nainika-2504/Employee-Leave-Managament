@@ -19,8 +19,8 @@ export const LoginPage = ({ onLogin }) => {
       .catch(() => {
         // Fallback demo accounts if backend not reachable
         setDemoUsers([
-          { id: 1, name: 'Alex Morgan', email: 'alex.morgan@company.com', role: 'EMPLOYEE', avatar: 'AM' },
-          { id: 2, name: 'Sarah Jenkins', email: 'sarah.jenkins@company.com', role: 'MANAGER', avatar: 'SJ' }
+          { id: 1, name: 'Nainika', email: 'nainika@company.com', role: 'EMPLOYEE', avatar: 'NA' },
+          { id: 2, name: 'Apoorva', email: 'apoorva@company.com', role: 'MANAGER', avatar: 'AP' }
         ]);
       });
   }, []);
@@ -160,6 +160,12 @@ export const LoginPage = ({ onLogin }) => {
               </button>
             ))}
           </div>
+        </div>
+
+        {/* Legal, Copyright & SRS Notice (SRS Section 3.12) */}
+        <div style={{ marginTop: '24px', textAlign: 'center', fontSize: '0.75rem', color: 'var(--text-tertiary, #94a3b8)', lineHeight: '1.5' }}>
+          <p style={{ margin: 0, fontWeight: 500 }}>© 2026 Employee Leave Management System (ELMS) — Group-3</p>
+          <p style={{ margin: '2px 0 0 0', fontSize: '0.7rem' }}>Compliant with SRS v1.0 • All Rights Reserved. Confidential &amp; Internal Organizational Use Only.</p>
         </div>
       </div>
     </div>

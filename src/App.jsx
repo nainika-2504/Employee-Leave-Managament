@@ -38,6 +38,7 @@ export function App() {
   const [reviewApp, setReviewApp] = useState(null);
   const [reviewAction, setReviewAction] = useState(null);
   const [reviewComments, setReviewComments] = useState('');
+  const [showHelpModal, setShowHelpModal] = useState(false);
 
   const loadData = useCallback(async () => {
     try {
@@ -242,7 +243,8 @@ export function App() {
         currentUser={currentUser} 
         currentView={currentView}
         onViewChange={setCurrentView}
-        onLogout={handleLogout} 
+        onLogout={handleLogout}
+        onOpenHelp={() => setShowHelpModal(true)}
       />
 
       {/* Main Panel */}
@@ -258,6 +260,11 @@ export function App() {
         <main className="main-content">
           {renderContentView()}
         </main>
+
+        {/* Application Footer - Legal, Copyright & SRS Notice (SRS Section 3.12) */}
+        <footer className="app-footer" style={{ textAlign: 'center', padding: '14px 24px', fontSize: '0.78rem', color: 'var(--text-tertiary, #94a3b8)', borderTop: '1px solid var(--border-color, #e2e8f0)', marginTop: 'auto', background: 'var(--bg-card, #ffffff)' }}>
+          <span>© 2026 Employee Leave Management System (ELMS) • <strong>Group-3</strong> • Aligned with SRS v1.0 • All Rights Reserved.</span>
+        </footer>
       </div>
 
       {/* Review Confirm Modal overlay */}
@@ -289,6 +296,51 @@ export function App() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Online Help & Legal Documentation Modal (SRS Sections 3.8 & 3.12) */}
+      {showHelpModal && (
+        <div className="modal-overlay" onClick={() => setShowHelpModal(false)}>
+          <div className="modal-content" style={{ maxWidth: 550 }} onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3 className="modal-title">System Guidance &amp; Legal Notices</h3>
+              <button className="modal-close" onClick={() => setShowHelpModal(false)}><X size={18} /></button>
+            </div>
+            <div className="modal-body" style={{ fontSize: '0.88rem', lineHeight: '1.6', color: 'var(--text-primary)' }}>
+              <div style={{ background: 'var(--bg-app)', padding: '12px 16px', borderRadius: '8px', marginBottom: 16 }}>
+                <strong style={{ color: 'var(--brand-primary, #2563eb)' }}>Employee Leave Policy (SRS v1.0 Quotas):</strong>
+                <ul style={{ margin: '8px 0 0 18px', padding: 0 }}>
+                  <li><strong>Annual Leave:</strong> 18 days/year (planned vacation, travel)</li>
+                  <li><strong>Sick Leave:</strong> 10 days/year (illness, medical recovery)</li>
+                  <li><strong>Casual Leave:</strong> 7 days/year (urgent personal affairs)</li>
+                </ul>
+              </div>
+
+              <h4 style={{ margin: '12px 0 4px 0', fontSize: '0.92rem' }}>How to Apply for Leave:</h4>
+              <p style={{ margin: 0, color: 'var(--text-secondary)' }}>
+                Navigate to <strong>Apply Leave</strong> &rarr; Select category &rarr; Pick start and end dates (system auto-computes working days) &rarr; Provide reason &rarr; Submit. Active requests appear in <em>My Leaves</em>.
+              </p>
+
+              <h4 style={{ margin: '14px 0 4px 0', fontSize: '0.92rem' }}>Manager Approvals &amp; Deductions:</h4>
+              <p style={{ margin: 0, color: 'var(--text-secondary)' }}>
+                Managers can view submissions under <strong>Pending Approvals</strong>. Approving a request triggers atomic deduction from the employee's remaining quota balance.
+              </p>
+
+              <hr style={{ border: 'none', borderTop: '1px solid var(--border-color, #e2e8f0)', margin: '16px 0' }} />
+
+              <div style={{ fontSize: '0.76rem', color: 'var(--text-tertiary, #94a3b8)' }}>
+                <p style={{ margin: '0 0 4px 0', fontWeight: 600, color: 'var(--text-secondary)' }}>Legal, Copyright &amp; Compliance Notice (SRS Section 3.12):</p>
+                <p style={{ margin: 0 }}>
+                  © 2026 Employee Leave Management System (ELMS) — Group-3. All Rights Reserved.
+                  This software is developed in strict adherence to SRS v1.0. Unauthorized duplication, reverse engineering, or redistribution of this software is strictly prohibited under institutional software property guidelines.
+                </p>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-primary" onClick={() => setShowHelpModal(false)}>Close Guide</button>
+            </div>
           </div>
         </div>
       )}

@@ -1,0 +1,103 @@
+<mxfile host="app.diagrams.net" modified="2026-09-13T12:45:00.000Z" agent="ELMS" version="21.0.0" type="device">
+  <diagram id="ELMS-Clean-Architecture" name="System Architecture">
+    <mxGraphModel dx="1200" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="680" background="#f8fafc" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Header Banner -->
+        <mxCell id="hdr" value="EMPLOYEE LEAVE MANAGEMENT SYSTEM (ELMS)&#xa;High-Level 3-Tier System Architecture" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f172a;strokeColor=none;fontColor=#ffffff;fontSize=16;fontStyle=1;align=center;arcSize=6;" vertex="1" parent="1">
+          <mxGeometry x="60" y="30" width="1080" height="54" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== TIER 1: CLIENT TIER ==================== -->
+        <mxCell id="t1_box" value="1. PRESENTATION TIER&#xa;(Frontend Client)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eff6ff;strokeColor=#3b82f6;strokeWidth=2;fontColor=#1d4ed8;fontSize=13;fontStyle=1;verticalAlign=top;spacingTop=12;arcSize=6;" vertex="1" parent="1">
+          <mxGeometry x="60" y="120" width="300" height="420" as="geometry" />
+        </mxCell>
+
+        <mxCell id="t1_actors" value="👨‍💼 Users (Employees &amp; Managers)&#xa;Web Browsers (Desktop &amp; Mobile)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#bfdbfe;fontColor=#1e3a8a;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="85" y="170" width="250" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="t1_react" value="React 18 Single Page Application&#xa;• Built with Vite &amp; Vanilla CSS&#xa;• Role-based Views &amp; Navigation&#xa;• Client-side Date &amp; Quota Validation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#bfdbfe;fontColor=#1e293b;fontSize=11;align=left;spacingLeft=15;" vertex="1" parent="1">
+          <mxGeometry x="85" y="240" width="250" height="85" as="geometry" />
+        </mxCell>
+
+        <mxCell id="t1_components" value="Core UI Modules:&#xa;• Dashboard &amp; Quota Cards&#xa;• Apply Leave Modal (Auto-days)&#xa;• Manager Approvals &amp; History&#xa;• Department Leave Calendar" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#bfdbfe;fontColor=#334155;fontSize=10;align=left;spacingLeft=15;" vertex="1" parent="1">
+          <mxGeometry x="85" y="345" width="250" height="95" as="geometry" />
+        </mxCell>
+
+        <mxCell id="t1_host" value="☁️ Hosted on Vercel Edge CDN&#xa;Global Distribution • Automatic HTTPS" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#60a5fa;fontColor=#1e40af;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="85" y="460" width="250" height="50" as="geometry" />
+        </mxCell>
+
+
+        <!-- ==================== CONNECTOR 1 -> 2 ==================== -->
+        <mxCell id="conn_1" value="REST API&#xa;HTTPS / JSON&#xa;Port 443 / 8085" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563eb;strokeWidth=2.5;fontColor=#1e40af;fontSize=11;fontStyle=1;labelBackgroundColor=#eff6ff;" edge="1" parent="1" source="t1_box" target="t2_box">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+
+        <!-- ==================== TIER 2: APPLICATION TIER ==================== -->
+        <mxCell id="t2_box" value="2. APPLICATION TIER&#xa;(Business Logic &amp; REST Services)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0fdf4;strokeColor=#16a34a;strokeWidth=2;fontColor=#15803d;fontSize=13;fontStyle=1;verticalAlign=top;spacingTop=12;arcSize=6;" vertex="1" parent="1">
+          <mxGeometry x="450" y="120" width="300" height="420" as="geometry" />
+        </mxCell>
+
+        <mxCell id="t2_controllers" value="REST Controllers &amp; CORS&#xa;• AuthController (/api/auth, /api/users)&#xa;• LeaveController (/api/leaves)&#xa;• Request DTO Validation &amp; WebConfig" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#bbf7d0;fontColor=#14532d;fontSize=11;align=left;spacingLeft=15;" vertex="1" parent="1">
+          <mxGeometry x="475" y="170" width="250" height="75" as="geometry" />
+        </mxCell>
+
+        <mxCell id="t2_services" value="Service Layer (@Transactional)&#xa;• LeaveService &amp; UserService&#xa;• Status Workflow: PENDING ➔&#xa;  APPROVED / REJECTED / CANCELLED&#xa;• Quota Verification &amp; Date Logic" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#bbf7d0;fontColor=#14532d;fontSize=11;align=left;spacingLeft=15;" vertex="1" parent="1">
+          <mxGeometry x="475" y="260" width="250" height="85" as="geometry" />
+        </mxCell>
+
+        <mxCell id="t2_deduction" value="⚡ Auto-Deduction Engine&#xa;Atomic Quota Balance Update:&#xa;used = used + days | remaining = total - used" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#f59e0b;fontColor=#92400e;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="475" y="360" width="250" height="48" as="geometry" />
+        </mxCell>
+
+        <mxCell id="t2_host" value="☁️ Spring Boot 3.4 (Java 21) on Render&#xa;Containerized Linux Service • Docker" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#4ade80;fontColor=#166534;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="475" y="425" width="250" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="t2_jpa" value="Data Access: Spring Data JPA / Hibernate ORM" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#bbf7d0;fontColor=#475569;fontSize=10;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="475" y="490" width="250" height="28" as="geometry" />
+        </mxCell>
+
+
+        <!-- ==================== CONNECTOR 2 -> 3 ==================== -->
+        <mxCell id="conn_2" value="JDBC Protocol&#xa;MySQL Connector&#xa;Port 3306" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#16a34a;strokeWidth=2.5;fontColor=#15803d;fontSize=11;fontStyle=1;labelBackgroundColor=#f0fdf4;" edge="1" parent="1" source="t2_box" target="t3_box">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+
+        <!-- ==================== TIER 3: DATA TIER ==================== -->
+        <mxCell id="t3_box" value="3. DATA TIER&#xa;(MySQL Database - SRS v1.0)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#faf5ff;strokeColor=#a855f7;strokeWidth=2;fontColor=#7e22ce;fontSize=13;fontStyle=1;verticalAlign=top;spacingTop=12;arcSize=6;" vertex="1" parent="1">
+          <mxGeometry x="840" y="120" width="300" height="420" as="geometry" />
+        </mxCell>
+
+        <mxCell id="t3_pool" value="Connection Pool: HikariCP&#xa;Maximum Pool Size = 10 (High Performance)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e8ff;strokeColor=#d8b4fe;fontColor=#6b21a8;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="865" y="170" width="250" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="t3_db" value="MySQL 8.0 Relational Engine&#xa;Database: elms_db (InnoDB)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e9d5ff;fontColor=#581c87;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="865" y="225" width="250" height="45" as="geometry" />
+        </mxCell>
+
+        <mxCell id="t3_tables" value="Relational Database Schema:&#xa;&#xa;📋 users&#xa;   (id, name, email, role, department)&#xa;&#xa;📊 leave_balances&#xa;   (user_id FK, leave_type, total, used, remaining)&#xa;&#xa;📝 leave_applications&#xa;   (user_id FK, dates, days, reason, status)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e9d5ff;fontColor=#334155;fontSize=10;align=left;spacingLeft=15;" vertex="1" parent="1">
+          <mxGeometry x="865" y="285" width="250" height="155" as="geometry" />
+        </mxCell>
+
+        <mxCell id="t3_security" value="🔒 Security &amp; Credentials&#xa;Encrypted Environment Variables • SSL Pooler" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e8ff;strokeColor=#d8b4fe;fontColor=#6b21a8;fontSize=10;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="865" y="460" width="250" height="50" as="geometry" />
+        </mxCell>
+
+
+        <!-- ==================== FOOTER: DEPLOYMENT SUMMARY ==================== -->
+        <mxCell id="ftr" value="Continuous Integration &amp; Deployment: GitHub Monorepo  ➔  Automated Vite Build (Vercel CDN)  ➔  Docker Multi-Stage Container (Render Cloud)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f5f9;strokeColor=#cbd5e1;fontColor=#475569;fontSize=11;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="60" y="570" width="1080" height="42" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

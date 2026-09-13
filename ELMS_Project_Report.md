@@ -3,7 +3,7 @@
 **Document Version:** 1.0  
 **Date:** 27/08/2026  
 **System Reference:** Aligned with SRS v1.0  
-**Technology Stack:** React 18 (Vite), Java 21, Spring Boot 3.4.1, PostgreSQL (Supabase), Docker, Render, Vercel  
+**Technology Stack:** React 18 (Vite), Java 21, Spring Boot 3.4.1, MySQL 8.0 (InnoDB), Docker, Render, Vercel  
 
 ---
 
@@ -63,11 +63,11 @@ The system strictly adheres to the 3-Tier architectural model specified in SRS S
 │   • Repositories (Spring Data JPA / Hibernate ORM)          │
 │   Containerized via Docker on Render Cloud Services         │
 └──────────────────────────────┬──────────────────────────────┘
-                               │ JDBC / SSL Pooler (Port 6543)
+                               │ JDBC / MySQL Driver (Port 3306)
 ┌──────────────────────────────▼──────────────────────────────┐
 │                       DATA TIER                             │
-│   PostgreSQL 17.6 Relational Database Engine                │
-│   Hosted on Supabase Cloud Infrastructure                   │
+│   MySQL 8.0 Relational Database Engine                      │
+│   Database: elms_db (InnoDB Engine - SRS v1.0)              │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -139,7 +139,7 @@ CREATE TABLE leave_applications (
 
 ### 3.1 User Management & Authentication (FR-01)
 - **Endpoint**: `POST /api/auth/login`
-- **Mechanism**: Validates credentials against the PostgreSQL `users` table.
+- **Mechanism**: Validates credentials against the MySQL `users` table.
 - **Session Persistence**: Stores the authenticated user profile in browser `localStorage` under `elms_current_user`.
 - **Role Isolation**:
   - `EMPLOYEE`: Access to Dashboard, Apply for Leave, My Leaves, and Profile.
@@ -218,9 +218,10 @@ The live production deployment is distributed across three cloud platforms:
    - Deployed at: [https://employee-leave-managament.onrender.com](https://employee-leave-managament.onrender.com)
    - Built from a multi-stage `Dockerfile` (`maven:3.9-eclipse-temurin-21` -> `eclipse-temurin:21-jre`).
    - Configured with connection pooling constraints (`maximum-pool-size=5`) to ensure database stability.
-3. **Database Tier (Supabase)**:
-   - PostgreSQL 17.6 managed instance running in Asia-Pacific region.
-   - Accessed over secure SSL JDBC connection pooler on port `6543`.
+3. **Database Tier (MySQL - SRS v1.0)**:
+   - MySQL 8.0 relational database engine with InnoDB storage.
+   - Accessed over standard JDBC connector on default port `3306`.
+   - Complete schema and initial seed data defined in `elms_database.sql`.
 
 ---
 

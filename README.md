@@ -10,7 +10,7 @@ A full-stack, cloud-deployed Employee Leave Management System designed to stream
 | :--- | :--- | :--- |
 | **Frontend Application** | Vercel | [https://employee-leave-managament.vercel.app](https://employee-leave-managament.vercel.app) |
 | **Backend REST API** | Render | [https://employee-leave-managament.onrender.com](https://employee-leave-managament.onrender.com) |
-| **Database** | Supabase | Cloud PostgreSQL |
+| **Database** | MySQL 9.6 | Local / Network MySQL Server |
 
 ---
 
@@ -18,10 +18,10 @@ A full-stack, cloud-deployed Employee Leave Management System designed to stream
 
 | Role | Name | Email Address | Password |
 | :--- | :--- | :--- | :--- |
-| **Employee** | Alex Morgan | `alex.morgan@company.com` | `password` |
-| **Employee** | David Kim | `david.kim@company.com` | `password` |
-| **Employee** | Emma Watson | `emma.watson@company.com` | `password` |
-| **Manager** | Sarah Jenkins | `sarah.jenkins@company.com` | `password` |
+| **Employee** | Nainika | `nainika@company.com` | `password` |
+| **Employee** | Natasha | `natasha@company.com` | `password` |
+| **Employee** | Sarvani | `sarvani@company.com` | `password` |
+| **Manager** | Apoorva | `apoorva@company.com` | `password` |
 
 ---
 
@@ -54,7 +54,7 @@ A full-stack, cloud-deployed Employee Leave Management System designed to stream
 ### Backend
 - **Framework**: Java 21 + Spring Boot 3
 - **ORM / Persistence**: Spring Data JPA / Hibernate
-- **Database**: PostgreSQL (Supabase Cloud) / MySQL Compatible
+- **Database**: MySQL 9.6 (Local Server, port 3307)
 - **Containerization**: Docker
 - **Deployment**: Render (Web Service)
 
@@ -94,16 +94,16 @@ Employee-Leave-Managament/
 ### Prerequisites
 - **Node.js** (v18+) & **npm**
 - **Java JDK 21** & **Maven**
-- **PostgreSQL** or **MySQL** (or use cloud database credentials)
+- **MySQL 9.6** (or MySQL 8.0+)
 
 ### 1. Backend Setup
 ```powershell
 cd backend
 
 # Set environment variables (or configure backend/src/main/resources/application.properties)
-$env:SPRING_DATASOURCE_URL="jdbc:postgresql://<HOST>:<PORT>/<DATABASE>?prepareThreshold=0"
-$env:SPRING_DATASOURCE_USERNAME="<USERNAME>"
-$env:SPRING_DATASOURCE_PASSWORD="<PASSWORD>"
+$env:SPRING_DATASOURCE_URL="jdbc:mysql://localhost:3307/elms_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC"
+$env:SPRING_DATASOURCE_USERNAME="root"
+$env:SPRING_DATASOURCE_PASSWORD="root"
 $env:PORT="8085"
 
 # Run Spring Boot

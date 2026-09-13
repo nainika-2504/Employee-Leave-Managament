@@ -1,38 +1,47 @@
 export const INITIAL_USERS = [
   {
     id: 101,
-    name: 'Alex Morgan',
-    email: 'alex.morgan@company.com',
+    name: 'Nainika',
+    email: 'nainika@company.com',
     role: 'EMPLOYEE',
     department: 'Engineering',
-    manager: 'Sarah Jenkins',
-    avatar: 'AM'
+    manager: 'Apoorva',
+    avatar: 'NA'
   },
   {
     id: 201,
-    name: 'Sarah Jenkins',
-    email: 'sarah.jenkins@company.com',
+    name: 'Apoorva',
+    email: 'apoorva@company.com',
     role: 'MANAGER',
     department: 'Engineering Management',
-    avatar: 'SJ'
+    avatar: 'AP'
   },
   {
     id: 102,
-    name: 'David Kim',
-    email: 'david.kim@company.com',
+    name: 'Natasha',
+    email: 'natasha@company.com',
     role: 'EMPLOYEE',
     department: 'Engineering',
-    manager: 'Sarah Jenkins',
-    avatar: 'DK'
+    manager: 'Apoorva',
+    avatar: 'NT'
   },
   {
     id: 103,
-    name: 'Emma Watson',
-    email: 'emma.watson@company.com',
+    name: 'Sarvani',
+    email: 'sarvani@company.com',
     role: 'EMPLOYEE',
     department: 'Design',
-    manager: 'Sarah Jenkins',
-    avatar: 'EW'
+    manager: 'Apoorva',
+    avatar: 'SV'
+  },
+  {
+    id: 104,
+    name: 'Sahaja',
+    email: 'sahaja@company.com',
+    role: 'EMPLOYEE',
+    department: 'Engineering',
+    manager: 'Apoorva',
+    avatar: 'SH'
   }
 ];
 
@@ -57,6 +66,11 @@ export const INITIAL_BALANCES = {
     ANNUAL: { total: 18, used: 10, remaining: 8 },
     SICK: { total: 10, used: 2, remaining: 8 },
     CASUAL: { total: 7, used: 1, remaining: 6 }
+  },
+  104: {
+    ANNUAL: { total: 18, used: 2, remaining: 16 },
+    SICK: { total: 10, used: 3, remaining: 7 },
+    CASUAL: { total: 7, used: 0, remaining: 7 }
   }
 };
 
@@ -64,14 +78,14 @@ export const INITIAL_APPLICATIONS = [
   {
     id: 'LV-1001',
     userId: 101,
-    userName: 'Alex Morgan',
+    userName: 'Nainika',
     department: 'Engineering',
     leaveType: 'ANNUAL',
     leaveTypeName: 'Annual Leave',
     startDate: '2026-09-10',
     endDate: '2026-09-12',
     daysCount: 3,
-    reason: 'Family summer vacation trip',
+    reason: 'Family vacation trip',
     status: 'PENDING',
     appliedOn: '2026-08-24',
     reviewerComments: ''
@@ -79,7 +93,7 @@ export const INITIAL_APPLICATIONS = [
   {
     id: 'LV-1002',
     userId: 102,
-    userName: 'David Kim',
+    userName: 'Natasha',
     department: 'Engineering',
     leaveType: 'CASUAL',
     leaveTypeName: 'Casual Leave',
@@ -94,7 +108,7 @@ export const INITIAL_APPLICATIONS = [
   {
     id: 'LV-1000',
     userId: 101,
-    userName: 'Alex Morgan',
+    userName: 'Nainika',
     department: 'Engineering',
     leaveType: 'SICK',
     leaveTypeName: 'Sick Leave',
@@ -104,14 +118,14 @@ export const INITIAL_APPLICATIONS = [
     reason: 'Dental surgery procedure and recovery',
     status: 'APPROVED',
     appliedOn: '2026-08-14',
-    reviewedBy: 'Sarah Jenkins',
+    reviewedBy: 'Apoorva',
     reviewedOn: '2026-08-14',
     reviewerComments: 'Approved. Get well soon!'
   },
   {
     id: 'LV-0999',
     userId: 103,
-    userName: 'Emma Watson',
+    userName: 'Sarvani',
     department: 'Design',
     leaveType: 'ANNUAL',
     leaveTypeName: 'Annual Leave',
@@ -121,7 +135,7 @@ export const INITIAL_APPLICATIONS = [
     reason: 'Personal travel',
     status: 'REJECTED',
     appliedOn: '2026-07-28',
-    reviewedBy: 'Sarah Jenkins',
+    reviewedBy: 'Apoorva',
     reviewedOn: '2026-07-29',
     reviewerComments: 'Conflict with major product release deadline.'
   }

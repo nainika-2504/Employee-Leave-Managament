@@ -1,7 +1,7 @@
 import React from 'react';
 import { Home, PlusCircle, FileText, User, Clock, ListFilter, Users, Calendar, HelpCircle, LogOut } from 'lucide-react';
 
-export const Sidebar = ({ currentUser, currentView, onViewChange, onLogout }) => {
+export const Sidebar = ({ currentUser, currentView, onViewChange, onLogout, onOpenHelp }) => {
   const isManager = currentUser?.role === 'MANAGER';
 
   // Define sidebar navigation items based on active role
@@ -47,7 +47,7 @@ export const Sidebar = ({ currentUser, currentView, onViewChange, onLogout }) =>
 
       {/* Bottom Actions */}
       <div className="sidebar-bottom">
-        <button className="sidebar-btn" title="Help">
+        <button className="sidebar-btn" title="Help & Documentation" onClick={onOpenHelp}>
           <HelpCircle size={20} />
         </button>
         {onLogout && (

@@ -1,0 +1,402 @@
+{
+  "info": {
+    "name": "ELMS - Employee Leave Management System API Suite",
+    "description": "Comprehensive Automated API Test Collection for Spring Boot 3.4.1 REST Services. Includes functional positive scenarios, validation edge cases, and automated test assertions.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8085",
+      "type": "string",
+      "description": "Base URL for ELMS backend (e.g. http://localhost:8085 or https://employee-leave-managament.onrender.com)"
+    },
+    {
+      "key": "employeeUserId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "managerName",
+      "value": "Apoorva",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Authentication - Employee Login (Valid)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200 OK\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"User authentication returned valid employee profile\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property(\"id\");",
+              "    pm.expect(jsonData).to.have.property(\"email\", \"nainika@company.com\");",
+              "    pm.expect(jsonData).to.have.property(\"role\", \"EMPLOYEE\");",
+              "    pm.collectionVariables.set(\"employeeUserId\", jsonData.id.toString());",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"nainika@company.com\",\n  \"password\": \"password\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/login",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "auth", "login"]
+        }
+      }
+    },
+    {
+      "name": "2. Authentication - Invalid Credentials (Negative 400)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 400 Bad Request\", function () {",
+              "    pm.response.to.have.status(400);",
+              "});",
+              "pm.test(\"Error response contains descriptive message\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property(\"error\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"unknown@company.com\",\n  \"password\": \"wrongpass\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/login",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "auth", "login"]
+        }
+      }
+    },
+    {
+      "name": "3. Users - Get All Users",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200 OK\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Returns array of seeded users\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.be.an(\"array\");",
+              "    pm.expect(jsonData.length).to.be.at.least(1);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/users",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "users"]
+        }
+      }
+    },
+    {
+      "name": "4. Balances - Get Leave Balances for User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200 OK\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Contains ANNUAL, SICK, and CASUAL quotas\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property(\"ANNUAL\");",
+              "    pm.expect(jsonData).to.have.property(\"SICK\");",
+              "    pm.expect(jsonData).to.have.property(\"CASUAL\");",
+              "    pm.expect(jsonData.ANNUAL).to.have.property(\"total\");",
+              "    pm.expect(jsonData.ANNUAL).to.have.property(\"remaining\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/users/{{employeeUserId}}/balances",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "users", "{{employeeUserId}}", "balances"]
+        }
+      }
+    },
+    {
+      "name": "5. Balances - Get All Team Balances (Manager View)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200 OK\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Returns nested map of team member balances\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.be.an(\"object\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/users/all-balances",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "users", "all-balances"]
+        }
+      }
+    },
+    {
+      "name": "6. Leaves - Get My Leaves (Employee Filter)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200 OK\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Returns list of employee applications\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.be.an(\"array\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/leaves?userId={{employeeUserId}}&role=EMPLOYEE",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "leaves"],
+          "query": [
+            { "key": "userId", "value": "{{employeeUserId}}" },
+            { "key": "role", "value": "EMPLOYEE" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "7. Leaves - Get All Leaves (Manager View)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200 OK\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Returns list of all department applications\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.be.an(\"array\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/leaves?role=MANAGER",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "leaves"],
+          "query": [
+            { "key": "role", "value": "MANAGER" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "8. Leaves - Submit New Leave Application",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200 OK\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Application created with status PENDING and auto-generated leaveCode\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property(\"id\");",
+              "    pm.expect(jsonData).to.have.property(\"status\", \"PENDING\");",
+              "    pm.expect(jsonData).to.have.property(\"leaveCode\");",
+              "    pm.collectionVariables.set(\"newApplicationId\", jsonData.id.toString());",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"leaveType\": \"CASUAL\",\n  \"startDate\": \"2026-10-15\",\n  \"endDate\": \"2026-10-16\",\n  \"daysCount\": 2,\n  \"reason\": \"API Automated Test Application\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/leaves?queryUserId={{employeeUserId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "leaves"],
+          "query": [
+            { "key": "queryUserId", "value": "{{employeeUserId}}" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "9. Leaves - Submit Leave Exceeding Quota (Negative 400)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 400 Bad Request\", function () {",
+              "    pm.response.to.have.status(400);",
+              "});",
+              "pm.test(\"Error message flags Insufficient leave balance\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property(\"error\");",
+              "    pm.expect(jsonData.error).to.include(\"Insufficient leave balance\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"leaveType\": \"CASUAL\",\n  \"startDate\": \"2026-11-01\",\n  \"endDate\": \"2026-11-20\",\n  \"daysCount\": 999,\n  \"reason\": \"Testing quota violation failure\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/leaves?queryUserId={{employeeUserId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "leaves"],
+          "query": [
+            { "key": "queryUserId", "value": "{{employeeUserId}}" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "10. Leaves - Review / Approve Leave Request",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200 OK\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Status transitioned to APPROVED with reviewer name and timestamp\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.status).to.eql(\"APPROVED\");",
+              "    pm.expect(jsonData.reviewedBy).to.eql(\"Apoorva\");",
+              "    pm.expect(jsonData).to.have.property(\"reviewedOn\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"APPROVED\",\n  \"reviewerComments\": \"Approved for API verification demonstration.\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/leaves/1/review?queryReviewerName={{managerName}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "leaves", "1", "review"],
+          "query": [
+            { "key": "queryReviewerName", "value": "{{managerName}}" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "11. Leaves - Cancel Leave Application (Employee)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200 OK or 400 if already processed\", function () {",
+              "    pm.expect([200, 400]).to.include(pm.response.code);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/leaves/2/cancel?queryUserId=2",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "leaves", "2", "cancel"],
+          "query": [
+            { "key": "queryUserId", "value": "2" }
+          ]
+        }
+      }
+    }
+  ]
+}

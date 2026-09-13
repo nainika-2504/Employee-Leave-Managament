@@ -15,3 +15,4 @@ backend/.idea/
 backend/.settings/
 backend/.classpath
 backend/.project
+backend/src/main/resources/application-local.properties
