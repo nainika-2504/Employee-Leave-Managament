@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { LeaveCardList } from '../components/LeaveCardList';
 import { ListFilter } from 'lucide-react';
 
-export const ManagerAllLeaves = ({ allApplications, onApprove, onReject }) => {
+export const ManagerAllLeaves = ({ allApplications, onApprove, onReject, onDelete }) => {
   const [filterStatus, setFilterStatus] = useState('ALL');
 
   const filteredApps = filterStatus === 'ALL'
@@ -47,6 +47,7 @@ export const ManagerAllLeaves = ({ allApplications, onApprove, onReject }) => {
           isManager={true}
           onApprove={onApprove}
           onReject={onReject}
+          onDelete={onDelete}
         />
       </div>
     </div>

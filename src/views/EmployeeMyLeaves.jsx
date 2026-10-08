@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { LeaveCardList } from '../components/LeaveCardList';
 import { Calendar, FileText } from 'lucide-react';
 
-export const EmployeeMyLeaves = ({ applications, onCancel }) => {
+export const EmployeeMyLeaves = ({ applications, onCancel, onDelete }) => {
   const [filterStatus, setFilterStatus] = useState('ALL');
 
   const filteredApps = filterStatus === 'ALL'
@@ -44,7 +44,7 @@ export const EmployeeMyLeaves = ({ applications, onCancel }) => {
 
       {/* Leave Cards */}
       <div className="section-card">
-        <LeaveCardList applications={filteredApps} isManager={false} onCancel={onCancel} />
+        <LeaveCardList applications={filteredApps} isManager={false} onCancel={onCancel} onDelete={onDelete} />
       </div>
     </div>
   );

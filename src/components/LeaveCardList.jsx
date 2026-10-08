@@ -1,6 +1,6 @@
 import React from 'react';
 import { StatusBadge } from './StatusBadge';
-import { Calendar, Check, X } from 'lucide-react';
+import { Calendar, Check, X, Trash2 } from 'lucide-react';
 
 const getTypeClass = (leaveType) => {
   const t = (leaveType || '').toUpperCase();
@@ -14,7 +14,7 @@ const getInitials = (name) => {
   return name.split(' ').map(n => n[0]).join('').toUpperCase();
 };
 
-export const LeaveCardList = ({ applications, isManager, onApprove, onReject, onCancel }) => {
+export const LeaveCardList = ({ applications, isManager, onApprove, onReject, onCancel, onDelete }) => {
   if (applications.length === 0) {
     return (
       <div className="empty-state">
@@ -75,27 +75,37 @@ export const LeaveCardList = ({ applications, isManager, onApprove, onReject, on
               </div>
             )}
 
-            {isManager && app.status === 'PENDING' && (
-              <div className="leave-card-actions">
-                <button className="action-btn approve" onClick={() => onApprove && onApprove(app)} title="Approve">
-                  <Check size={16} />
-                </button>
-                <button className="action-btn reject" onClick={() => onReject && onReject(app)} title="Reject">
-                  <X size={16} />
-                </button>
-              </div>
-            )}
-            
-            {!isManager && app.status === 'PENDING' && (
-              <div className="leave-card-actions">
+            <div className="leave-card-actions">
+              {isManager && app.status === 'PENDING' && (
+                <>
+                  <button className="action-btn approve" onClick={() => onApprove && onApprove(app)} title="Approve">
+                    <Check size={16} />
+                  </button>
+                  <button className="action-btn reject" onClick={() => onReject && onReject(app)} title="Reject">
+                    <X size={16} />
+                  </button>
+                </>
+              )}
+
+              {!isManager && app.status === 'PENDING' && onCancel && (
                 <button 
-                  onClick={() => onCancel && onCancel(app)}
+                  onClick={() => onCancel(app)}
                   style={{ background: '#EAE1D9', color: '#6E473B', border: 'none', padding: '6px 12px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}
                 >
                   Cancel Request
                 </button>
-              </div>
-            )}
+              )}
+
+              {onDelete && (
+                <button 
+                  onClick={() => onDelete(app)}
+                  title="Delete Application"
+                  style={{ background: '#fee2e2', color: '#dc2626', border: '1px solid #fecaca', padding: '6px 8px', borderRadius: '4px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                >
+                  <Trash2 size={15} />
+                </button>
+              )}
+            </div>
           </div>
         </div>
       ))}

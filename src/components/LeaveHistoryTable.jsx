@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { StatusBadge } from './StatusBadge';
-import { Search, Filter, Calendar, FileText } from 'lucide-react';
+import { Search, Filter, Calendar, FileText, Trash2 } from 'lucide-react';
 
-export const LeaveHistoryTable = ({ applications, isManager = false }) => {
+export const LeaveHistoryTable = ({ applications, isManager = false, onDelete }) => {
   const [filterStatus, setFilterStatus] = useState('ALL');
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -66,6 +66,7 @@ export const LeaveHistoryTable = ({ applications, isManager = false }) => {
                 <th>Reason</th>
                 <th>Status</th>
                 <th>Remarks / Reviewer</th>
+                {onDelete && <th style={{ textAlign: 'center' }}>Action</th>}
               </tr>
             </thead>
             <tbody>
@@ -106,6 +107,17 @@ export const LeaveHistoryTable = ({ applications, isManager = false }) => {
                       <span style={{ color: 'var(--text-muted)' }}>—</span>
                     )}
                   </td>
+                  {onDelete && (
+                    <td style={{ textAlign: 'center' }}>
+                      <button
+                        onClick={() => onDelete(app)}
+                        title="Delete Application"
+                        style={{ background: '#fee2e2', color: '#dc2626', border: 'none', padding: '6px 8px', borderRadius: '4px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </td>
+                  )}
                 </tr>
               ))}
             </tbody>

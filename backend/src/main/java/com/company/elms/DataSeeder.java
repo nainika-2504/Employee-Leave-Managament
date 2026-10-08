@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Component
+@SuppressWarnings("null")
 public class DataSeeder implements CommandLineRunner {
 
     @Autowired

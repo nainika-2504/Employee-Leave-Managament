@@ -3,7 +3,7 @@ import { StatCard } from '../components/StatCard';
 import { LeaveCardList } from '../components/LeaveCardList';
 import { Clock, CheckCircle2, XCircle, Users, Shield } from 'lucide-react';
 
-export const ManagerDashboard = ({ users, allApplications, allBalances, onApprove, onReject }) => {
+export const ManagerDashboard = ({ users, allApplications, allBalances, onApprove, onReject, onDelete }) => {
   const pendingApps = allApplications.filter(a => a.status === 'PENDING');
   const approvedApps = allApplications.filter(a => a.status === 'APPROVED');
   const rejectedApps = allApplications.filter(a => a.status === 'REJECTED');
@@ -43,6 +43,7 @@ export const ManagerDashboard = ({ users, allApplications, allBalances, onApprov
             isManager={true}
             onApprove={onApprove}
             onReject={onReject}
+            onDelete={onDelete}
           />
         </div>
       )}

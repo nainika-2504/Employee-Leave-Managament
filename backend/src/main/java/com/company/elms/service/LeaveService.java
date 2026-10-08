@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Service
+@SuppressWarnings("null")
 public class LeaveService {
 
     @Autowired
@@ -119,6 +120,13 @@ public class LeaveService {
 
         app.setStatus("CANCELLED");
         return leaveApplicationRepository.save(app);
+    }
+
+    @Transactional
+    public void deleteLeave(Long id) {
+        LeaveApplication app = leaveApplicationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Leave application not found."));
+        leaveApplicationRepository.delete(app);
     }
 
     private String getLeaveTypeName(String type) {

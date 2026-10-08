@@ -116,5 +116,18 @@ export const apiService = {
     }
 
     return res.json();
+  },
+
+  deleteLeave: async (requestId) => {
+    const res = await fetch(`${BASE_URL}/leaves/${requestId}`, {
+      method: 'DELETE'
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => ({}));
+      throw new Error(errorData.error || 'Failed to delete leave request.');
+    }
+
+    return res.json();
   }
 };

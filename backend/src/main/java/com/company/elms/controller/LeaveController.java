@@ -103,4 +103,18 @@ public class LeaveController {
             return ResponseEntity.badRequest().body(response);
         }
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteLeave(@PathVariable Long id) {
+        try {
+            leaveService.deleteLeave(id);
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Leave application deleted successfully.");
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            Map<String, String> response = new HashMap<>();
+            response.put("error", e.getMessage());
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
 }

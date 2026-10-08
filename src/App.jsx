@@ -145,6 +145,17 @@ export function App() {
     }
   };
 
+  const handleDeleteLeave = async (app) => {
+    if (!window.confirm(`Are you sure you want to permanently delete leave application ${app.leaveCode || '#' + app.id}?`)) return;
+    try {
+      await apiService.deleteLeave(app.id);
+      showToast(`Leave application ${app.leaveCode || '#' + app.id} deleted successfully.`);
+      await loadData();
+    } catch (err) {
+      alert(err.message || "Failed to delete leave application.");
+    }
+  };
+
   // Dynamically render the page view based on active role & currentView state
   const renderContentView = () => {
     const role = currentUser?.role;
@@ -160,6 +171,7 @@ export function App() {
               onRefresh={loadData}
               showToast={showToast}
               onCancel={handleCancelLeave}
+              onDelete={handleDeleteLeave}
             />
           );
         case 'apply':
@@ -172,11 +184,11 @@ export function App() {
             />
           );
         case 'my-leaves':
-          return <EmployeeMyLeaves applications={applications} onCancel={handleCancelLeave} />;
+          return <EmployeeMyLeaves applications={applications} onCancel={handleCancelLeave} onDelete={handleDeleteLeave} />;
         case 'profile':
           return <ProfilePage currentUser={currentUser} onLogout={handleLogout} />;
         default:
-          return <EmployeeDashboard currentUser={currentUser} userBalances={userBalances} applications={applications} onRefresh={loadData} showToast={showToast} onCancel={handleCancelLeave} />;
+          return <EmployeeDashboard currentUser={currentUser} userBalances={userBalances} applications={applications} onRefresh={loadData} showToast={showToast} onCancel={handleCancelLeave} onDelete={handleDeleteLeave} />;
       }
     } else if (role === 'MANAGER') {
       switch (currentView) {
@@ -188,6 +200,7 @@ export function App() {
               allBalances={allBalances}
               onApprove={(app) => handleOpenReview(app, 'APPROVED')}
               onReject={(app) => handleOpenReview(app, 'REJECTED')}
+              onDelete={handleDeleteLeave}
             />
           );
         case 'approvals':
@@ -204,6 +217,7 @@ export function App() {
               allApplications={applications}
               onApprove={(app) => handleOpenReview(app, 'APPROVED')}
               onReject={(app) => handleOpenReview(app, 'REJECTED')}
+              onDelete={handleDeleteLeave}
             />
           );
         case 'balances':
@@ -220,6 +234,7 @@ export function App() {
               allBalances={allBalances}
               onApprove={(app) => handleOpenReview(app, 'APPROVED')}
               onReject={(app) => handleOpenReview(app, 'REJECTED')}
+              onDelete={handleDeleteLeave}
             />
           );
       }

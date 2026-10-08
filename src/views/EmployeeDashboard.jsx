@@ -5,7 +5,7 @@ import { CalendarView } from '../components/CalendarView';
 import { ApplyLeaveModal } from '../components/ApplyLeaveModal';
 import { Plus, Calendar, Clock, CheckCircle2, Sparkles } from 'lucide-react';
 
-export const EmployeeDashboard = ({ currentUser, userBalances, applications, onRefresh, showToast, onCancel }) => {
+export const EmployeeDashboard = ({ currentUser, userBalances, applications, onRefresh, showToast, onCancel, onDelete }) => {
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
 
   const annualBal = userBalances?.ANNUAL || { remaining: 14, used: 4, total: 18 };
@@ -69,7 +69,7 @@ export const EmployeeDashboard = ({ currentUser, userBalances, applications, onR
             Recent Applications
           </h2>
         </div>
-        <LeaveCardList applications={recentApps} isManager={false} onCancel={onCancel} />
+        <LeaveCardList applications={recentApps} isManager={false} onCancel={onCancel} onDelete={onDelete} />
       </div>
 
       {/* Calendar */}
