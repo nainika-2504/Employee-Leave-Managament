@@ -1,5 +1,8 @@
 import React from 'react';
-import { Home, PlusCircle, FileText, User, Clock, ListFilter, Users, Calendar, HelpCircle, LogOut } from 'lucide-react';
+import {
+  Home, PlusCircle, FileText, User, Clock, ListFilter, Users,
+  Calendar, HelpCircle, LogOut, BarChart2, Settings
+} from 'lucide-react';
 
 export const Sidebar = ({ currentUser, currentView, onViewChange, onLogout, onOpenHelp }) => {
   const isManager = currentUser?.role === 'MANAGER';
@@ -12,12 +15,14 @@ export const Sidebar = ({ currentUser, currentView, onViewChange, onLogout, onOp
         { id: 'history', icon: ListFilter, label: 'Leave History' },
         { id: 'balances', icon: Users, label: 'Team Balances' },
         { id: 'calendar', icon: Calendar, label: 'Leave Calendar' },
+        { id: 'reports', icon: BarChart2, label: 'Reports' },
         { id: 'profile', icon: User, label: 'My Profile' },
       ]
     : [
         { id: 'dashboard', icon: Home, label: 'Dashboard' },
         { id: 'apply', icon: PlusCircle, label: 'Apply Leave' },
         { id: 'my-leaves', icon: FileText, label: 'My Leaves' },
+        { id: 'reports', icon: BarChart2, label: 'My Reports' },
         { id: 'profile', icon: User, label: 'My Profile' },
       ];
 

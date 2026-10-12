@@ -47,11 +47,15 @@ CREATE TABLE leave_applications (
     user_id BIGINT NOT NULL,
     user_name VARCHAR(255),
     department VARCHAR(255),
-    leave_type VARCHAR(50) NOT NULL,
+    leave_type VARCHAR(50) NOT NULL,  -- 'ANNUAL', 'SICK', 'CASUAL', 'MATERNITY'
     leave_type_name VARCHAR(255) NOT NULL,
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
     days_count INT NOT NULL,
+    is_half_day TINYINT(1) DEFAULT 0,        -- 1 = half day leave
+    half_day_session VARCHAR(20),             -- 'MORNING' or 'AFTERNOON'
+    medical_certificate VARCHAR(500),         -- filename/path of uploaded cert (Sick Leave)
+    retroactive TINYINT(1) DEFAULT 0,        -- 1 = leave-first, apply-later
     reason TEXT NOT NULL,
     status VARCHAR(50) NOT NULL, -- 'PENDING', 'APPROVED', 'REJECTED', 'CANCELLED'
     applied_on DATE NOT NULL,
@@ -73,20 +77,25 @@ INSERT INTO users (id, name, email, password, role, department, manager, avatar)
 (4, 'Sarvani', 'sarvani@company.com', 'password', 'EMPLOYEE', 'Design', 'Apoorva', 'SV'),
 (5, 'Sahaja', 'sahaja@company.com', 'password', 'EMPLOYEE', 'Engineering', 'Apoorva', 'SH');
 
--- Seed Leave Balances (Statutory Quotas: 18 Annual, 10 Sick, 7 Casual)
+-- Seed Leave Balances (Statutory Quotas: 18 Annual, 10 Sick, 7 Casual, 180 Maternity)
 INSERT INTO leave_balances (user_id, leave_type, total, used, remaining) VALUES
 (1, 'ANNUAL', 18, 4, 14),
 (1, 'SICK', 10, 1, 9),
 (1, 'CASUAL', 7, 2, 5),
+(1, 'MATERNITY', 180, 0, 180),
 (3, 'ANNUAL', 18, 6, 12),
 (3, 'SICK', 10, 0, 10),
 (3, 'CASUAL', 7, 3, 4),
+(3, 'MATERNITY', 180, 0, 180),
 (4, 'ANNUAL', 18, 10, 8),
 (4, 'SICK', 10, 2, 8),
 (4, 'CASUAL', 7, 1, 6),
+(4, 'MATERNITY', 180, 0, 180),
 (5, 'ANNUAL', 18, 2, 16),
 (5, 'SICK', 10, 3, 7),
-(5, 'CASUAL', 7, 0, 7);
+(5, 'CASUAL', 7, 0, 7),
+(5, 'MATERNITY', 180, 0, 180);
+
 
 -- Seed Historical Leave Applications
 INSERT INTO leave_applications (leave_code, user_id, user_name, department, leave_type, leave_type_name, start_date, end_date, days_count, reason, status, applied_on, reviewed_by, reviewed_on, reviewer_comments) VALUES

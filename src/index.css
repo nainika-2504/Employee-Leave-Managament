@@ -597,6 +597,11 @@ body {
   color: #A78D78;
 }
 
+.leave-card-type-badge.extended {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
 .leave-card-dates {
   font-size: 0.8rem;
   color: var(--text-secondary);

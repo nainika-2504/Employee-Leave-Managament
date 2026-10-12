@@ -4,8 +4,9 @@ import { Calendar, Check, X, Trash2 } from 'lucide-react';
 
 const getTypeClass = (leaveType) => {
   const t = (leaveType || '').toUpperCase();
-  if (t === 'ANNUAL') return 'annual';
-  if (t === 'SICK') return 'sick';
+  if (t === 'NORMAL' || t === 'ANNUAL') return 'annual';
+  if (t === 'MEDICAL' || t === 'SICK') return 'sick';
+  if (t === 'EXTENDED') return 'extended';
   return 'casual';
 };
 

@@ -6,7 +6,8 @@ export const INITIAL_USERS = [
     role: 'EMPLOYEE',
     department: 'Engineering',
     manager: 'Apoorva',
-    avatar: 'NA'
+    avatar: 'NA',
+    joiningDate: '2024-01-15'
   },
   {
     id: 201,
@@ -14,7 +15,8 @@ export const INITIAL_USERS = [
     email: 'apoorva@company.com',
     role: 'MANAGER',
     department: 'Engineering Management',
-    avatar: 'AP'
+    avatar: 'AP',
+    joiningDate: '2023-06-01'
   },
   {
     id: 102,
@@ -23,7 +25,8 @@ export const INITIAL_USERS = [
     role: 'EMPLOYEE',
     department: 'Engineering',
     manager: 'Apoorva',
-    avatar: 'NT'
+    avatar: 'NT',
+    joiningDate: '2024-03-10'
   },
   {
     id: 103,
@@ -32,7 +35,8 @@ export const INITIAL_USERS = [
     role: 'EMPLOYEE',
     department: 'Design',
     manager: 'Apoorva',
-    avatar: 'SV'
+    avatar: 'SV',
+    joiningDate: '2024-05-20'
   },
   {
     id: 104,
@@ -41,36 +45,37 @@ export const INITIAL_USERS = [
     role: 'EMPLOYEE',
     department: 'Engineering',
     manager: 'Apoorva',
-    avatar: 'SH'
+    avatar: 'SH',
+    joiningDate: '2024-08-01'
   }
 ];
 
 export const LEAVE_TYPES = [
-  { id: 'ANNUAL', name: 'Annual Leave', defaultTotal: 18, color: '#4f46e5' },
-  { id: 'SICK', name: 'Sick Leave', defaultTotal: 10, color: '#059669' },
-  { id: 'CASUAL', name: 'Casual Leave', defaultTotal: 7, color: '#d97706' }
+  { id: 'NORMAL', name: 'Normal Leave', defaultTotal: 10, color: '#4f46e5', maxConsecutiveDays: 3 },
+  { id: 'MEDICAL', name: 'Medical Leave', defaultTotal: 10, color: '#059669' },
+  { id: 'EXTENDED', name: 'Extended Leave', defaultTotal: 30, color: '#0284c7' }
 ];
 
 export const INITIAL_BALANCES = {
   101: {
-    ANNUAL: { total: 18, used: 4, remaining: 14 },
-    SICK: { total: 10, used: 1, remaining: 9 },
-    CASUAL: { total: 7, used: 2, remaining: 5 }
+    NORMAL: { total: 10, used: 2, remaining: 8 },
+    MEDICAL: { total: 10, used: 1, remaining: 9 },
+    EXTENDED: { total: 30, used: 0, remaining: 30 }
   },
   102: {
-    ANNUAL: { total: 18, used: 6, remaining: 12 },
-    SICK: { total: 10, used: 0, remaining: 10 },
-    CASUAL: { total: 7, used: 3, remaining: 4 }
+    NORMAL: { total: 10, used: 4, remaining: 6 },
+    MEDICAL: { total: 10, used: 0, remaining: 10 },
+    EXTENDED: { total: 30, used: 0, remaining: 30 }
   },
   103: {
-    ANNUAL: { total: 18, used: 10, remaining: 8 },
-    SICK: { total: 10, used: 2, remaining: 8 },
-    CASUAL: { total: 7, used: 1, remaining: 6 }
+    NORMAL: { total: 10, used: 3, remaining: 7 },
+    MEDICAL: { total: 10, used: 2, remaining: 8 },
+    EXTENDED: { total: 30, used: 0, remaining: 30 }
   },
   104: {
-    ANNUAL: { total: 18, used: 2, remaining: 16 },
-    SICK: { total: 10, used: 3, remaining: 7 },
-    CASUAL: { total: 7, used: 0, remaining: 7 }
+    NORMAL: { total: 10, used: 1, remaining: 9 },
+    MEDICAL: { total: 10, used: 3, remaining: 7 },
+    EXTENDED: { total: 30, used: 0, remaining: 30 }
   }
 };
 
@@ -80,8 +85,8 @@ export const INITIAL_APPLICATIONS = [
     userId: 101,
     userName: 'Nainika',
     department: 'Engineering',
-    leaveType: 'ANNUAL',
-    leaveTypeName: 'Annual Leave',
+    leaveType: 'NORMAL',
+    leaveTypeName: 'Normal Leave',
     startDate: '2026-09-10',
     endDate: '2026-09-12',
     daysCount: 3,
@@ -95,8 +100,8 @@ export const INITIAL_APPLICATIONS = [
     userId: 102,
     userName: 'Natasha',
     department: 'Engineering',
-    leaveType: 'CASUAL',
-    leaveTypeName: 'Casual Leave',
+    leaveType: 'NORMAL',
+    leaveTypeName: 'Normal Leave',
     startDate: '2026-09-01',
     endDate: '2026-09-02',
     daysCount: 2,
@@ -110,8 +115,8 @@ export const INITIAL_APPLICATIONS = [
     userId: 101,
     userName: 'Nainika',
     department: 'Engineering',
-    leaveType: 'SICK',
-    leaveTypeName: 'Sick Leave',
+    leaveType: 'MEDICAL',
+    leaveTypeName: 'Medical Leave',
     startDate: '2026-08-15',
     endDate: '2026-08-15',
     daysCount: 1,
@@ -127,12 +132,12 @@ export const INITIAL_APPLICATIONS = [
     userId: 103,
     userName: 'Sarvani',
     department: 'Design',
-    leaveType: 'ANNUAL',
-    leaveTypeName: 'Annual Leave',
+    leaveType: 'EXTENDED',
+    leaveTypeName: 'Extended Leave',
     startDate: '2026-08-01',
     endDate: '2026-08-05',
     daysCount: 5,
-    reason: 'Personal travel',
+    reason: 'Personal travel abroad',
     status: 'REJECTED',
     appliedOn: '2026-07-28',
     reviewedBy: 'Apoorva',

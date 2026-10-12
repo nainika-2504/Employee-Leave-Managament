@@ -38,7 +38,7 @@ public class LeaveApplication {
     private String department; // Cached department for easy frontend loading
     
     @Column(name = "leave_type", nullable = false)
-    private String leaveType; // "ANNUAL", "SICK", "CASUAL"
+    private String leaveType; // "ANNUAL", "SICK", "CASUAL", "MATERNITY"
     
     @Column(name = "leave_type_name", nullable = false)
     private String leaveTypeName; // e.g. "Annual Leave"
@@ -50,13 +50,42 @@ public class LeaveApplication {
     private LocalDate endDate;
     
     @Column(name = "days_count", nullable = false)
-    private int daysCount;
+    @Builder.Default
+    private Double daysCount = 0.0;
+
+    @Column(name = "is_half_day")
+    @Builder.Default
+    private Boolean halfDay = false; // true if half-day leave
+
+    public boolean isHalfDay() {
+        return Boolean.TRUE.equals(this.halfDay);
+    }
+
+    @Column(name = "half_day_session")
+    private String halfDaySession; // "MORNING" or "AFTERNOON" when halfDay=true
+
+    @Column(name = "medical_certificate")
+    private String medicalCertificate; // filename/reference for uploaded certificate (Sick/Medical Leave)
+
+    @Column(name = "documentation_status")
+    @Builder.Default
+    private String documentationStatus = "NONE"; // "NONE", "PENDING", "SUBMITTED", "VERIFIED", "REJECTED"
+
+    @Column(name = "retroactive")
+    @Builder.Default
+    private Boolean retroactive = false; // true if applied after leave date (leave-first-apply-later)
+
+    @Column(name = "retrospective_reason", columnDefinition = "TEXT")
+    private String retrospectiveReason; // justification for late application
+
+    @Column(name = "submission_date")
+    private LocalDate submissionDate; // actual submission date recorded separately from leave dates
     
     @Column(nullable = false, columnDefinition = "TEXT")
     private String reason;
     
     @Column(nullable = false)
-    private String status; // "PENDING", "APPROVED", "REJECTED"
+    private String status; // "PENDING", "APPROVED", "REJECTED", "CANCELLED"
     
     @Column(name = "applied_on", nullable = false)
     private LocalDate appliedOn;
@@ -69,4 +98,11 @@ public class LeaveApplication {
     
     @Column(name = "reviewer_comments", columnDefinition = "TEXT")
     private String reviewerComments;
+
+    @Column(name = "override_reason", columnDefinition = "TEXT")
+    private String overrideReason;
+
+    @Column(name = "shortage_warning")
+    @Builder.Default
+    private Boolean shortageWarning = false;
 }

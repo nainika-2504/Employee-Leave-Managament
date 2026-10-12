@@ -26,11 +26,14 @@ public class LeaveBalance {
     private String leaveType; // "ANNUAL", "SICK", "CASUAL"
     
     @Column(nullable = false)
-    private int total;
+    @Builder.Default
+    private Double total = 0.0;
     
     @Column(nullable = false)
-    private int used;
+    @Builder.Default
+    private Double used = 0.0;
     
     @Column(nullable = false)
-    private int remaining;
+    @Builder.Default
+    private Double remaining = 0.0;
 }

@@ -3,7 +3,7 @@ import { Sidebar } from './components/Sidebar';
 import { Header } from './components/Header';
 import { LoginPage } from './views/LoginPage';
 import { apiService } from './services/api';
-import { CheckCircle2, X } from 'lucide-react';
+import { CheckCircle2, X, AlertTriangle, FileText, Check } from 'lucide-react';
 
 // Employee Page Imports
 import { EmployeeDashboard } from './views/EmployeeDashboard';
@@ -11,12 +11,13 @@ import { EmployeeApplyLeave } from './views/EmployeeApplyLeave';
 import { EmployeeMyLeaves } from './views/EmployeeMyLeaves';
 import { ProfilePage } from './views/ProfilePage';
 
-// Manager Page Imports
+// Manager & Executive Page Imports
 import { ManagerDashboard } from './views/ManagerDashboard';
 import { ManagerApprovals } from './views/ManagerApprovals';
 import { ManagerAllLeaves } from './views/ManagerAllLeaves';
 import { ManagerTeamBalances } from './views/ManagerTeamBalances';
 import { ManagerCalendar } from './views/ManagerCalendar';
+import { ReportGenerator } from './views/ReportGenerator';
 
 const AUTH_KEY = 'elms_authenticated';
 
@@ -34,16 +35,26 @@ export function App() {
   // Dynamic page routing view state
   const [currentView, setCurrentView] = useState('dashboard');
 
-  // Review confirming modal states (shared globally for any manager page)
+  // Review confirming modal states
   const [reviewApp, setReviewApp] = useState(null);
   const [reviewAction, setReviewAction] = useState(null);
   const [reviewComments, setReviewComments] = useState('');
+  const [reviewOverrideReason, setReviewOverrideReason] = useState('');
+  const [reviewDocStatus, setReviewDocStatus] = useState('VERIFIED');
   const [showHelpModal, setShowHelpModal] = useState(false);
 
   const loadData = useCallback(async () => {
     try {
       const allUsers = await apiService.getUsers();
-      const activeUser = apiService.getCurrentUser();
+      let activeUser = apiService.getCurrentUser();
+
+      if (activeUser && Array.isArray(allUsers)) {
+        const found = allUsers.find(u => u.id === activeUser.id || u.email === activeUser.email);
+        if (found) {
+          activeUser = { ...activeUser, ...found };
+          apiService.setCurrentUser(activeUser);
+        }
+      }
 
       setUsers(allUsers);
       setCurrentUser(activeUser);
@@ -101,7 +112,7 @@ export function App() {
       });
       setApplications(apps);
 
-      showToast(`Switched to ${selectedUser.name} (${selectedUser.role === 'MANAGER' ? 'Manager Portal' : 'Employee Portal'})`);
+      showToast(`Switched to ${selectedUser.name} (${selectedUser.role} Portal)`);
     } catch (err) {
       console.error("Error switching user profiles:", err);
     }
@@ -117,17 +128,26 @@ export function App() {
     setReviewApp(app);
     setReviewAction(action);
     setReviewComments(action === 'APPROVED' ? 'Approved.' : 'Unable to approve due to scheduling conflicts.');
+    setReviewOverrideReason(app.shortageWarning ? 'Staffing exception approved by manager.' : '');
+    setReviewDocStatus(app.documentationStatus === 'SUBMITTED' ? 'VERIFIED' : app.documentationStatus);
   };
 
   const handleConfirmReview = async (e) => {
     e.preventDefault();
     if (!reviewApp || !reviewAction) return;
     try {
-      await apiService.reviewLeaveRequest(reviewApp.id, reviewAction, reviewComments);
+      await apiService.reviewLeaveRequest(
+        reviewApp.id,
+        reviewAction,
+        reviewComments,
+        reviewOverrideReason,
+        reviewApp.medicalCertificate ? reviewDocStatus : null
+      );
       showToast(`Leave request ${reviewApp.leaveCode || reviewApp.id} has been ${reviewAction.toLowerCase()}.`);
       setReviewApp(null);
       setReviewAction(null);
       setReviewComments('');
+      setReviewOverrideReason('');
       await loadData();
     } catch (err) {
       alert(err.message || "Failed to process review.");
@@ -159,6 +179,7 @@ export function App() {
   // Dynamically render the page view based on active role & currentView state
   const renderContentView = () => {
     const role = currentUser?.role;
+    const isManager = role === 'MANAGER';
 
     if (role === 'EMPLOYEE') {
       switch (currentView) {
@@ -185,12 +206,21 @@ export function App() {
           );
         case 'my-leaves':
           return <EmployeeMyLeaves applications={applications} onCancel={handleCancelLeave} onDelete={handleDeleteLeave} />;
+        case 'reports':
+          return (
+            <ReportGenerator
+              allApplications={applications}
+              users={users}
+              allBalances={allBalances}
+              currentUser={currentUser}
+            />
+          );
         case 'profile':
-          return <ProfilePage currentUser={currentUser} onLogout={handleLogout} />;
+          return <ProfilePage currentUser={currentUser} userBalances={userBalances} onLogout={handleLogout} />;
         default:
           return <EmployeeDashboard currentUser={currentUser} userBalances={userBalances} applications={applications} onRefresh={loadData} showToast={showToast} onCancel={handleCancelLeave} onDelete={handleDeleteLeave} />;
       }
-    } else if (role === 'MANAGER') {
+    } else if (isManager) {
       switch (currentView) {
         case 'dashboard':
           return (
@@ -224,8 +254,17 @@ export function App() {
           return <ManagerTeamBalances users={users} allBalances={allBalances} />;
         case 'calendar':
           return <ManagerCalendar allApplications={applications} />;
+        case 'reports':
+          return (
+            <ReportGenerator
+              allApplications={applications}
+              users={users}
+              allBalances={allBalances}
+              currentUser={currentUser}
+            />
+          );
         case 'profile':
-          return <ProfilePage currentUser={currentUser} onLogout={handleLogout} />;
+          return <ProfilePage currentUser={currentUser} userBalances={userBalances} onLogout={handleLogout} />;
         default:
           return (
             <ManagerDashboard
@@ -264,7 +303,7 @@ export function App() {
 
       {/* Main Panel */}
       <div className="main-panel">
-        {/* Top Header with simulated role switching */}
+        {/* Top Header with role switching & notifications */}
         <Header
           currentUser={currentUser}
           users={users}
@@ -276,16 +315,16 @@ export function App() {
           {renderContentView()}
         </main>
 
-        {/* Application Footer - Legal, Copyright & SRS Notice (SRS Section 3.12) */}
+        {/* Application Footer */}
         <footer className="app-footer" style={{ textAlign: 'center', padding: '14px 24px', fontSize: '0.78rem', color: 'var(--text-tertiary, #94a3b8)', borderTop: '1px solid var(--border-color, #e2e8f0)', marginTop: 'auto', background: 'var(--bg-card, #ffffff)' }}>
-          <span>© 2026 Employee Leave Management System (ELMS) • <strong>Group-3</strong> • Aligned with SRS v1.0 • All Rights Reserved.</span>
+          <span>© 2026 Employee Leave Management System (ELMS) • <strong>Group-3</strong> • Aligned with Institutional Faculty Review Guidelines • All Rights Reserved.</span>
         </footer>
       </div>
 
-      {/* Review Confirm Modal overlay */}
+      {/* Review Confirm Modal overlay with Staff Shortage Warnings & Medical Doc Verification */}
       {reviewApp && (
         <div className="modal-overlay" onClick={() => setReviewApp(null)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: 540 }}>
             <div className="modal-header">
               <h3 className="modal-title">
                 {reviewAction === 'APPROVED' ? 'Approve' : 'Reject'} Leave ({reviewApp.leaveCode || `#${reviewApp.id}`})
@@ -294,11 +333,54 @@ export function App() {
             </div>
             <form onSubmit={handleConfirmReview}>
               <div className="modal-body">
-                <div style={{ background: 'var(--bg-app)', padding: '12px 16px', borderRadius: '8px', marginBottom: 16, fontSize: '0.88rem' }}>
-                  <div><strong>Employee:</strong> {reviewApp.userName}</div>
+                <div style={{ background: 'var(--bg-app)', padding: '12px 16px', borderRadius: '8px', marginBottom: 14, fontSize: '0.86rem' }}>
+                  <div><strong>Employee:</strong> {reviewApp.userName} ({reviewApp.department})</div>
                   <div><strong>Request:</strong> {reviewApp.daysCount} Day(s) {reviewApp.leaveTypeName} ({reviewApp.startDate} to {reviewApp.endDate})</div>
+                  {reviewApp.halfDay && <div style={{ color: '#2563eb', fontWeight: 600 }}>• Half-Day Session: {reviewApp.halfDaySession}</div>}
                   <div style={{ marginTop: 4, color: 'var(--text-secondary)' }}><em>"{reviewApp.reason}"</em></div>
                 </div>
+
+                {/* Staff Shortage Alert if triggered */}
+                {reviewApp.shortageWarning && (
+                  <div style={{ background: '#fef2f2', border: '1px solid #fecaca', padding: '10px 14px', borderRadius: 8, marginBottom: 14, color: '#991b1b', fontSize: '0.82rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontWeight: 700, marginBottom: 2 }}>
+                      <AlertTriangle size={15} /> Potential Department Staffing Shortage
+                    </div>
+                    <span>Approving this absence lowers department availability below the configured 50% threshold. If approving an exception, state your override justification below:</span>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Mandatory exception justification..."
+                      value={reviewOverrideReason}
+                      onChange={e => setReviewOverrideReason(e.target.value)}
+                      style={{ marginTop: 6, background: '#fff', fontSize: '0.8rem' }}
+                      required={reviewAction === 'APPROVED'}
+                    />
+                  </div>
+                )}
+
+                {/* Medical Certificate Review if attached */}
+                {reviewApp.medicalCertificate && (
+                  <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', padding: '10px 14px', borderRadius: 8, marginBottom: 14, fontSize: '0.82rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontWeight: 700, color: '#166534', marginBottom: 4 }}>
+                      <FileText size={15} /> Supporting Evidence Attached
+                    </div>
+                    <div>File: <strong>{reviewApp.medicalCertificate}</strong></div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6 }}>
+                      <label style={{ fontSize: '0.78rem', color: '#166534', fontWeight: 600 }}>Verification Decision:</label>
+                      <select
+                        className="form-control"
+                        style={{ width: 'auto', padding: '2px 8px', fontSize: '0.78rem' }}
+                        value={reviewDocStatus}
+                        onChange={e => setReviewDocStatus(e.target.value)}
+                      >
+                        <option value="VERIFIED">✓ Verified &amp; Accepted</option>
+                        <option value="REJECTED">✕ Rejected / Invalid Document</option>
+                      </select>
+                    </div>
+                  </div>
+                )}
+
                 <div className="form-group">
                   <label className="form-label">Reviewer Comments</label>
                   <textarea className="form-control" rows={3} value={reviewComments} onChange={(e) => setReviewComments(e.target.value)} required />
@@ -315,43 +397,32 @@ export function App() {
         </div>
       )}
 
-      {/* Online Help & Legal Documentation Modal (SRS Sections 3.8 & 3.12) */}
+      {/* Online Help & Legal Documentation Modal */}
       {showHelpModal && (
         <div className="modal-overlay" onClick={() => setShowHelpModal(false)}>
           <div className="modal-content" style={{ maxWidth: 550 }} onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h3 className="modal-title">System Guidance &amp; Legal Notices</h3>
+              <h3 className="modal-title">System Guidance &amp; Policies</h3>
               <button className="modal-close" onClick={() => setShowHelpModal(false)}><X size={18} /></button>
             </div>
             <div className="modal-body" style={{ fontSize: '0.88rem', lineHeight: '1.6', color: 'var(--text-primary)' }}>
               <div style={{ background: 'var(--bg-app)', padding: '12px 16px', borderRadius: '8px', marginBottom: 16 }}>
-                <strong style={{ color: 'var(--brand-primary, #2563eb)' }}>Employee Leave Policy (SRS v1.0 Quotas):</strong>
+                <strong style={{ color: 'var(--brand-primary, #2563eb)' }}>Configured Leave Categories:</strong>
                 <ul style={{ margin: '8px 0 0 18px', padding: 0 }}>
-                  <li><strong>Annual Leave:</strong> 18 days/year (planned vacation, travel)</li>
-                  <li><strong>Sick Leave:</strong> 10 days/year (illness, medical recovery)</li>
-                  <li><strong>Casual Leave:</strong> 7 days/year (urgent personal affairs)</li>
+                  <li><strong>Normal Leave (Annual/Casual):</strong> Maximum 3 consecutive working days.</li>
+                  <li><strong>Half-Day Leave:</strong> Deducts 0.5 days (Morning / Afternoon).</li>
+                  <li><strong>Sick/Medical Leave:</strong> Allows retroactive dates with late reason &amp; certificate.</li>
+                  <li><strong>Extended Leave:</strong> Exempt from 3-day consecutive limit; draws from Extended quota (30d).</li>
+                  <li><strong>Maternity Leave:</strong> Statutory entitlement (180 days).</li>
                 </ul>
               </div>
 
-              <h4 style={{ margin: '12px 0 4px 0', fontSize: '0.92rem' }}>How to Apply for Leave:</h4>
+              <h4 style={{ margin: '12px 0 4px 0', fontSize: '0.92rem' }}>Role-Based Access Control:</h4>
               <p style={{ margin: 0, color: 'var(--text-secondary)' }}>
-                Navigate to <strong>Apply Leave</strong> &rarr; Select category &rarr; Pick start and end dates (system auto-computes working days) &rarr; Provide reason &rarr; Submit. Active requests appear in <em>My Leaves</em>.
+                <strong>Employee:</strong> Apply, cancel, view balances, track ledger.<br />
+                <strong>Manager:</strong> Approve/reject, availability timeline, shortage warnings, delegations.<br />
+                <strong>HR/Admin:</strong> Entitlement rules, company holidays, monthly accruals, audit logs.
               </p>
-
-              <h4 style={{ margin: '14px 0 4px 0', fontSize: '0.92rem' }}>Manager Approvals &amp; Deductions:</h4>
-              <p style={{ margin: 0, color: 'var(--text-secondary)' }}>
-                Managers can view submissions under <strong>Pending Approvals</strong>. Approving a request triggers atomic deduction from the employee's remaining quota balance.
-              </p>
-
-              <hr style={{ border: 'none', borderTop: '1px solid var(--border-color, #e2e8f0)', margin: '16px 0' }} />
-
-              <div style={{ fontSize: '0.76rem', color: 'var(--text-tertiary, #94a3b8)' }}>
-                <p style={{ margin: '0 0 4px 0', fontWeight: 600, color: 'var(--text-secondary)' }}>Legal, Copyright &amp; Compliance Notice (SRS Section 3.12):</p>
-                <p style={{ margin: 0 }}>
-                  © 2026 Employee Leave Management System (ELMS) — Group-3. All Rights Reserved.
-                  This software is developed in strict adherence to SRS v1.0. Unauthorized duplication, reverse engineering, or redistribution of this software is strictly prohibited under institutional software property guidelines.
-                </p>
-              </div>
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-primary" onClick={() => setShowHelpModal(false)}>Close Guide</button>

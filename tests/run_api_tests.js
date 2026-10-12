@@ -88,6 +88,63 @@ const tests = [
       reason: 'Testing quota boundary enforcement'
     },
     expectedStatus: 400
+  },
+  {
+    id: 'TC-09',
+    name: 'GET /api/leaves/calculate-days - Exclude Weekends & Holidays',
+    method: 'GET',
+    endpoint: '/api/leaves/calculate-days?startDate=2026-10-12&endDate=2026-10-16&halfDay=false',
+    expectedStatus: 200,
+    validate: (res, data) => data.chargeableDays > 0
+  },
+  {
+    id: 'TC-10',
+    name: 'GET /api/leaves/dashboard-analytics - 8 Metrics & 5 Datasets',
+    method: 'GET',
+    endpoint: '/api/leaves/dashboard-analytics',
+    expectedStatus: 200,
+    validate: (res, data) => (
+      data.summary != null &&
+      data.summary.totalEmployees != null &&
+      data.summary.pendingRequests != null &&
+      Array.isArray(data.monthlyTrends) &&
+      Array.isArray(data.typeDistribution) &&
+      Array.isArray(data.departmentStats) &&
+      data.approvalAnalytics != null &&
+      Array.isArray(data.dailyAvailability)
+    )
+  },
+  {
+    id: 'TC-11',
+    name: 'GET /api/admin/policies - Configurable Leave Policies',
+    method: 'GET',
+    endpoint: '/api/admin/policies',
+    expectedStatus: 200,
+    validate: (res, data) => typeof data === 'object' && Object.keys(data).length > 0
+  },
+  {
+    id: 'TC-12',
+    name: 'GET /api/admin/holidays - Public Holidays Calendar',
+    method: 'GET',
+    endpoint: '/api/admin/holidays',
+    expectedStatus: 200,
+    validate: (res, data) => Array.isArray(data) && data.length > 0
+  },
+  {
+    id: 'TC-13',
+    name: 'GET /api/notifications/unread-count - Unread Count',
+    method: 'GET',
+    endpoint: '/api/notifications/unread-count?userId=1',
+    expectedStatus: 200,
+    validate: (res, data) => typeof data.unreadCount === 'number'
+  },
+  {
+    id: 'TC-14',
+    name: 'GET /api/leaves/transactions - Leave Transaction Ledger',
+    method: 'GET',
+    endpoint: '/api/leaves/transactions?userId=1',
+    expectedStatus: 200,
+    validate: (res, data) => Array.isArray(data)
   }
 ];
 

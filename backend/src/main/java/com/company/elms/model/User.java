@@ -2,6 +2,7 @@ package com.company.elms.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "users")
@@ -33,4 +34,6 @@ public class User {
     private String manager;
     
     private String avatar;
+
+    private LocalDate joiningDate;
 }

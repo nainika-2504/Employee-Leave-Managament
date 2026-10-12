@@ -3,16 +3,26 @@ import { StatCard } from '../components/StatCard';
 import { LeaveCardList } from '../components/LeaveCardList';
 import { CalendarView } from '../components/CalendarView';
 import { ApplyLeaveModal } from '../components/ApplyLeaveModal';
-import { Plus, Calendar, Clock, CheckCircle2, Sparkles } from 'lucide-react';
+import { Plus, Calendar, Clock, HeartPulse, ShieldCheck } from 'lucide-react';
 
 export const EmployeeDashboard = ({ currentUser, userBalances, applications, onRefresh, showToast, onCancel, onDelete }) => {
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
 
-  const annualBal = userBalances?.ANNUAL || { remaining: 14, used: 4, total: 18 };
-  const sickBal = userBalances?.SICK || { remaining: 9, used: 1, total: 10 };
-  const casualBal = userBalances?.CASUAL || { remaining: 5, used: 2, total: 7 };
+  const currentMonthNumber = new Date().getMonth() + 1; // 10 in October
+  const rawNormalTotal = userBalances?.NORMAL?.total ?? 10;
+  const normalTotal = Math.min(rawNormalTotal, currentMonthNumber);
+  const normalUsed = userBalances?.NORMAL?.used ?? 2;
+  const normalRemaining = Math.max(0, normalTotal - normalUsed);
 
-  const totalRemaining = annualBal.remaining + sickBal.remaining + casualBal.remaining;
+  const normalBal = {
+    remaining: normalRemaining,
+    used: normalUsed,
+    total: normalTotal
+  };
+  const medicalBal = userBalances?.MEDICAL || { remaining: 9, used: 1, total: 10 };
+  const extendedBal = userBalances?.EXTENDED || { remaining: 30, used: 0, total: 30 };
+
+  const totalRemaining = normalBal.remaining + medicalBal.remaining + extendedBal.remaining;
   const pendingCount = applications.filter(a => a.status === 'PENDING').length;
   const recentApps = applications.slice(0, 3);
 
@@ -21,8 +31,8 @@ export const EmployeeDashboard = ({ currentUser, userBalances, applications, onR
       {/* Page Header */}
       <div className="page-header">
         <div>
-          <h1 className="page-title">Welcome back, {currentUser.name.split(' ')[0]}!</h1>
-          <p className="page-description">Here's a quick overview of your leave status and recent activity.</p>
+          <h1 className="page-title">Welcome back, {currentUser.name ? currentUser.name.split(' ')[0] : 'Employee'}!</h1>
+          <p className="page-description">Here's a quick overview of your leave status, quota balances, and activity.</p>
         </div>
         <button className="btn btn-primary" onClick={() => setIsApplyModalOpen(true)}>
           <Plus size={18} /> Apply for Leave
@@ -32,32 +42,32 @@ export const EmployeeDashboard = ({ currentUser, userBalances, applications, onR
       {/* Colorful Stat Cards */}
       <div className="stats-grid">
         <StatCard
-          label="Annual Leaves"
-          value={`${annualBal.used}/${annualBal.total}`}
-          subtext={`${annualBal.remaining} days remaining`}
+          label="Normal Leave"
+          value={`${normalBal.used}/${normalBal.total}`}
+          subtext={`${normalBal.remaining} days remaining (10 accrued to date)`}
           icon={Calendar}
           gradient="gradient-purple"
         />
         <StatCard
-          label="Sick Leaves"
-          value={`${sickBal.used}/${sickBal.total}`}
-          subtext={`${sickBal.remaining} days remaining`}
-          icon={CheckCircle2}
-          gradient="gradient-yellow"
+          label="Medical Leave"
+          value={`${medicalBal.used}/${medicalBal.total}`}
+          subtext={`${medicalBal.remaining} days remaining`}
+          icon={HeartPulse}
+          gradient="gradient-green"
         />
         <StatCard
-          label="Casual Leaves"
-          value={`${casualBal.used}/${casualBal.total}`}
-          subtext={`${casualBal.remaining} days remaining`}
-          icon={Sparkles}
-          gradient="gradient-green"
+          label="Extended Leave"
+          value={`${extendedBal.used}/${extendedBal.total}`}
+          subtext={`${extendedBal.remaining} days remaining`}
+          icon={Clock}
+          gradient="gradient-yellow"
         />
         <StatCard
           label="Total Balance"
           value={`${totalRemaining} Days`}
           subtext={`${pendingCount} request${pendingCount === 1 ? '' : 's'} pending`}
-          icon={Clock}
-          gradient="gradient-pink"
+          icon={ShieldCheck}
+          gradient="gradient-purple"
         />
       </div>
 
