@@ -20,9 +20,9 @@ export const EmployeeDashboard = ({ currentUser, userBalances, applications, onR
     total: normalTotal
   };
   const medicalBal = userBalances?.MEDICAL || { remaining: 9, used: 1, total: 10 };
-  const extendedBal = userBalances?.EXTENDED || { remaining: 30, used: 0, total: 30 };
+  const extendedBal = userBalances?.EXTENDED || { remaining: 0, used: 0, total: 0 };
 
-  const totalRemaining = normalBal.remaining + medicalBal.remaining + extendedBal.remaining;
+  const totalRemaining = normalBal.remaining + medicalBal.remaining;
   const pendingCount = applications.filter(a => a.status === 'PENDING').length;
   const recentApps = applications.slice(0, 3);
 
@@ -56,14 +56,14 @@ export const EmployeeDashboard = ({ currentUser, userBalances, applications, onR
           gradient="gradient-green"
         />
         <StatCard
-          label="Extended Leave"
-          value={`${extendedBal.used}/${extendedBal.total}`}
-          subtext={`${extendedBal.remaining} days remaining`}
+          label="Extended Leave (Unpaid)"
+          value={`${extendedBal.used || 0}d Taken`}
+          subtext="No limit · Salary Deducted (LOP)"
           icon={Clock}
           gradient="gradient-yellow"
         />
         <StatCard
-          label="Total Balance"
+          label="Paid Leave Balance"
           value={`${totalRemaining} Days`}
           subtext={`${pendingCount} request${pendingCount === 1 ? '' : 's'} pending`}
           icon={ShieldCheck}

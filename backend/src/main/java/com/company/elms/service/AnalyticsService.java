@@ -261,7 +261,7 @@ public class AnalyticsService {
         switch (type.toUpperCase()) {
             case "NORMAL": return "Normal Leave";
             case "MEDICAL": return "Medical Leave";
-            case "EXTENDED": return "Extended Leave";
+            case "EXTENDED": return "Extended Leave (Unpaid)";
             case "ANNUAL": return "Normal Leave";
             case "SICK": return "Medical Leave";
             case "CASUAL": return "Normal Leave";

@@ -77,15 +77,17 @@ export const ApplyLeaveModal = ({ isOpen, onClose, userBalances, onSuccess, init
 
         // Enforce max 3 consecutive days for normal leave categories (Annual, Casual)
         if (isNormalLeave && chargeable > NORMAL_MAX_DAYS) {
-          setError(`Normal leave (${formData.leaveType}) cannot exceed ${NORMAL_MAX_DAYS} consecutive working days. For longer absences, please select Extended Leave.`);
+          setError(`Normal leave (${formData.leaveType}) cannot exceed ${NORMAL_MAX_DAYS} consecutive working days. For longer absences, please select Extended Leave (Unpaid).`);
           return;
         }
 
-        // Available balance check
-        const currentTypeBalance = userBalances?.[formData.leaveType]?.remaining ?? 0;
-        if (chargeable > currentTypeBalance) {
-          setError(`Insufficient leave balance! Requested: ${chargeable} day(s), Available: ${currentTypeBalance} day(s).`);
-          return;
+        // Available balance check (Extended leave is unpaid with no fixed quota limit)
+        if (!isExtendedLeave) {
+          const currentTypeBalance = userBalances?.[formData.leaveType]?.remaining ?? 0;
+          if (chargeable > currentTypeBalance) {
+            setError(`Insufficient leave balance! Requested: ${chargeable} day(s), Available: ${currentTypeBalance} day(s).`);
+            return;
+          }
         }
 
         setError('');
@@ -149,14 +151,16 @@ export const ApplyLeaveModal = ({ isOpen, onClose, userBalances, onSuccess, init
       return;
     }
 
-    const currentTypeBalance = userBalances?.[formData.leaveType]?.remaining ?? 0;
-    if (daysCount > currentTypeBalance) {
-      setError(`Cannot apply for ${daysCount} days. Only ${currentTypeBalance} days available.`);
-      return;
+    if (!isExtendedLeave) {
+      const currentTypeBalance = userBalances?.[formData.leaveType]?.remaining ?? 0;
+      if (daysCount > currentTypeBalance) {
+        setError(`Cannot apply for ${daysCount} days. Only ${currentTypeBalance} days available.`);
+        return;
+      }
     }
 
     if (isNormalLeave && daysCount > NORMAL_MAX_DAYS) {
-      setError(`Normal leave is capped at ${NORMAL_MAX_DAYS} consecutive days. Please use Extended Leave.`);
+      setError(`Normal leave is capped at ${NORMAL_MAX_DAYS} consecutive days. Please use Extended Leave (Unpaid).`);
       return;
     }
 
@@ -241,7 +245,9 @@ export const ApplyLeaveModal = ({ isOpen, onClose, userBalances, onSuccess, init
               >
                 {leaveTypes.map((type) => (
                   <option key={type.id} value={type.id}>
-                    {type.name} (Available: {userBalances?.[type.id]?.remaining ?? 0} days)
+                    {type.id === 'EXTENDED'
+                      ? 'Extended Leave (Unpaid) (No limit · Salary Deducted)'
+                      : `${type.name} (Available: ${userBalances?.[type.id]?.remaining ?? 0} days)`}
                   </option>
                 ))}
               </select>
@@ -264,28 +270,28 @@ export const ApplyLeaveModal = ({ isOpen, onClose, userBalances, onSuccess, init
                 <Info size={14} style={{ marginTop: 2, flexShrink: 0 }} />
                 <span>
                   <strong>Normal Leave Policy:</strong> Limited to a maximum of <strong>3 consecutive working days</strong>.
-                  For longer absences, select <strong>Extended Leave</strong>.
+                  For longer absences, select <strong>Extended Leave (Unpaid)</strong>.
                 </span>
               </div>
             )}
 
-            {/* Extended Leave Policy Banner */}
+            {/* Extended Leave (Unpaid) Policy Banner */}
             {isExtendedLeave && (
               <div style={{
-                background: '#eff6ff',
-                border: '1px solid #bfdbfe',
-                color: '#1e40af',
-                padding: '8px 12px',
+                background: '#fffbeb',
+                border: '1px solid #fde68a',
+                color: '#92400e',
+                padding: '10px 14px',
                 borderRadius: '7px',
-                fontSize: '0.81rem',
+                fontSize: '0.82rem',
                 marginBottom: 14,
                 display: 'flex',
                 alignItems: 'flex-start',
                 gap: 8
               }}>
-                <Info size={14} style={{ marginTop: 2, flexShrink: 0 }} />
+                <Info size={15} style={{ marginTop: 2, flexShrink: 0, color: '#d97706' }} />
                 <span>
-                  <strong>Extended Leave:</strong> Exempt from the 3-day consecutive limit. Requires manager and HR review, drawing from your 30-day Extended Leave quota.
+                  <strong>Extended Leave (Unpaid / Loss of Pay):</strong> There is no fixed limit to this category. In eligible circumstances, you may apply for as many days as required. Note that approved absences under this category are <strong>unpaid</strong> and subject to <strong>proportional salary deduction</strong> in payroll.
                 </span>
               </div>
             )}
@@ -422,8 +428,17 @@ export const ApplyLeaveModal = ({ isOpen, onClose, userBalances, onSuccess, init
                   </div>
                 </div>
                 <div style={{ textAlign: 'right' }}>
-                  <span style={{ color: '#64748b' }}>Balance After: </span>
-                  <strong style={{ color: '#059669' }}>{(selectedBalance - daysCount).toFixed(1)} Days</strong>
+                  {isExtendedLeave ? (
+                    <div>
+                      <span style={{ color: '#d97706', fontWeight: 600, fontSize: '0.84rem' }}>Unpaid Absence</span>
+                      <div style={{ fontSize: '0.72rem', color: '#92400e' }}>Subject to Salary Deduction</div>
+                    </div>
+                  ) : (
+                    <>
+                      <span style={{ color: '#64748b' }}>Balance After: </span>
+                      <strong style={{ color: '#059669' }}>{(selectedBalance - daysCount).toFixed(1)} Days</strong>
+                    </>
+                  )}
                 </div>
               </div>
             )}

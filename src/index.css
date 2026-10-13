@@ -625,6 +625,240 @@ body {
   margin-bottom: 2px;
 }
 
+.leave-card-attachment {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.leave-card-attachment-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.leave-card-attachment-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #166534;
+}
+
+.leave-card-attachment-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.leave-card-attachment-filename {
+  font-size: 0.78rem;
+  color: #1e293b;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 175px;
+}
+
+.btn-view-doc {
+  background: #166534;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  padding: 3px 8px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: var(--transition);
+  flex-shrink: 0;
+}
+
+.btn-view-doc:hover {
+  background: #14532d;
+}
+
+.doc-status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.doc-status-badge.status-submitted,
+.doc-status-badge.submitted {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.doc-status-badge.status-verified,
+.doc-status-badge.verified {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.doc-status-badge.status-rejected,
+.doc-status-badge.rejected {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.doc-status-badge.status-pending,
+.doc-status-badge.pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.leave-card-attachment-missing {
+  background: #fffbeb;
+  border: 1px dashed #fde68a;
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.76rem;
+  color: #92400e;
+}
+
+.leave-card-retro {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  font-size: 0.78rem;
+}
+
+.leave-card-retro-label {
+  font-weight: 700;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  margin-bottom: 2px;
+}
+
+.leave-card-retro-text {
+  color: var(--text-primary);
+  font-style: italic;
+  line-height: 1.35;
+}
+
+/* Modal styling for document preview */
+.doc-meta-box {
+  background: var(--bg-subtle, #f8fafc);
+  border: 1px solid var(--border-light, #e2e8f0);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  font-size: 0.82rem;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.doc-meta-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.doc-paper-preview {
+  background: #ffffff;
+  border: 2px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.02), 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.doc-paper-header {
+  border-bottom: 2px solid #334155;
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.doc-paper-hospital {
+  font-weight: 800;
+  font-size: 0.88rem;
+  color: #1e293b;
+  letter-spacing: 0.5px;
+}
+
+.doc-paper-sub {
+  font-size: 0.72rem;
+  color: #64748b;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.doc-paper-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.82rem;
+}
+
+.doc-paper-line {
+  display: flex;
+  gap: 8px;
+}
+
+.doc-paper-label {
+  font-weight: 700;
+  color: #475569;
+  min-width: 125px;
+}
+
+.doc-paper-val {
+  color: #0f172a;
+}
+
+.doc-paper-badge-strip {
+  margin-top: 8px;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  padding: 8px 10px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: #166534;
+}
+
+.doc-paper-footer {
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px dashed #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  color: #64748b;
+}
+
+.doc-paper-seal {
+  background: #fef3c7;
+  border: 1px solid #f59e0b;
+  color: #92400e;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
 .leave-card-footer {
   display: flex;
   align-items: center;

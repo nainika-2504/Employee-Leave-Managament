@@ -231,7 +231,7 @@ export const AdminSettings = ({ users = [], currentUser, showToast }) => {
                   onBlur={(e) => handleSavePolicy('max_consecutive_normal_days', e.target.value, 'Maximum consecutive normal leave days allowed')}
                 />
               </div>
-              <small style={{ color: '#64748b' }}>Leaves exceeding this limit require 'Extended Leave'.</small>
+              <small style={{ color: '#64748b' }}>Leaves exceeding this limit require 'Extended Leave (Unpaid)'.</small>
             </div>
 
             <div className="form-group">
@@ -418,7 +418,7 @@ export const AdminSettings = ({ users = [], currentUser, showToast }) => {
                   <option value="ANNUAL">Annual Leave</option>
                   <option value="SICK">Sick Leave</option>
                   <option value="CASUAL">Casual Leave</option>
-                  <option value="EXTENDED">Extended Leave</option>
+                  <option value="EXTENDED">Extended Leave (Unpaid)</option>
                 </select>
               </div>
               <div className="form-group">

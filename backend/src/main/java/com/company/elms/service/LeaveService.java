@@ -95,12 +95,18 @@ public class LeaveService {
                     maxConsecutiveDays + " consecutive working days. For longer absences, please apply under 'Extended Leave'.");
         }
 
-        // Available balance validation
+        // Available balance validation (Extended Leave is unpaid with no fixed quota limit)
+        boolean isExtended = "EXTENDED".equalsIgnoreCase(leaveType);
         LeaveBalance balance = leaveBalanceRepository.findByUserIdAndLeaveType(userId, leaveType)
-                .orElseThrow(() -> new RuntimeException("Leave balance record not found for type: " + leaveType));
+                .orElse(null);
 
-        if (chargeableDays > balance.getRemaining()) {
-            throw new RuntimeException("Insufficient leave balance! Requested: " + chargeableDays + " day(s), Available: " + balance.getRemaining() + " day(s).");
+        if (!isExtended) {
+            if (balance == null) {
+                throw new RuntimeException("Leave balance record not found for type: " + leaveType);
+            }
+            if (chargeableDays > balance.getRemaining()) {
+                throw new RuntimeException("Insufficient leave balance! Requested: " + chargeableDays + " day(s), Available: " + balance.getRemaining() + " day(s).");
+            }
         }
 
         // Overlap and duplicate request detection
@@ -126,7 +132,7 @@ public class LeaveService {
 
         // Documentation status
         String docStatus = "NONE";
-        if ("SICK".equalsIgnoreCase(leaveType) || dto.isRetroactive() || "EXTENDED".equalsIgnoreCase(leaveType)) {
+        if ("SICK".equalsIgnoreCase(leaveType) || "MEDICAL".equalsIgnoreCase(leaveType) || dto.isRetroactive() || "EXTENDED".equalsIgnoreCase(leaveType)) {
             if (dto.getMedicalCertificate() != null && !dto.getMedicalCertificate().trim().isEmpty()) {
                 docStatus = "SUBMITTED";
             } else {
@@ -225,26 +231,34 @@ public class LeaveService {
 
         // Deduct from remaining balance atomically when approved
         if ("APPROVED".equals(targetStatus)) {
+            boolean isExtended = "EXTENDED".equalsIgnoreCase(app.getLeaveType());
             LeaveBalance balance = leaveBalanceRepository.findByUserIdAndLeaveType(app.getUser().getId(), app.getLeaveType())
-                    .orElseThrow(() -> new RuntimeException("Leave balance record not found."));
+                    .orElse(null);
 
-            double newUsed = balance.getUsed() + app.getDaysCount();
-            double newRemaining = Math.max(0.0, balance.getTotal() - newUsed);
-            balance.setUsed(newUsed);
-            balance.setRemaining(newRemaining);
-            leaveBalanceRepository.save(balance);
+            double newUsed = (balance != null ? balance.getUsed() : 0.0) + app.getDaysCount();
+            double newRemaining = (balance != null && !isExtended) ? Math.max(0.0, balance.getTotal() - newUsed) : 0.0;
+
+            if (balance != null) {
+                balance.setUsed(newUsed);
+                if (!isExtended) {
+                    balance.setRemaining(newRemaining);
+                }
+                leaveBalanceRepository.save(balance);
+            }
 
             // Record transaction in ledger
             LeaveTransaction tx = LeaveTransaction.builder()
                     .user(app.getUser())
                     .leaveType(app.getLeaveType())
-                    .transactionType("DEDUCTION")
+                    .transactionType(isExtended ? "SALARY_DEDUCTION" : "DEDUCTION")
                     .amount(-app.getDaysCount())
                     .balanceAfter(newRemaining)
                     .effectiveDate(app.getStartDate())
                     .leaveApplicationId(app.getId())
                     .performedBy(reviewerName != null ? reviewerName : "Manager")
-                    .reason("Approved leave application " + app.getLeaveCode())
+                    .reason(isExtended 
+                            ? "Approved unpaid leave " + app.getLeaveCode() + " (" + app.getDaysCount() + " days - Salary Deducted)"
+                            : "Approved leave application " + app.getLeaveCode())
                     .createdAt(LocalDateTime.now())
                     .build();
             leaveTransactionRepository.save(tx);
@@ -465,7 +479,7 @@ public class LeaveService {
         switch (type.toUpperCase()) {
             case "NORMAL": return "Normal Leave";
             case "MEDICAL": return "Medical Leave";
-            case "EXTENDED": return "Extended Leave";
+            case "EXTENDED": return "Extended Leave (Unpaid)";
             case "ANNUAL": return "Normal Leave";
             case "SICK": return "Medical Leave";
             case "CASUAL": return "Normal Leave";

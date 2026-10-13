@@ -31,11 +31,12 @@ export const EmployeeApplyLeave = ({ currentUser, userBalances, onRefresh, showT
     },
     {
       id: 'EXTENDED',
-      name: 'Extended Leave',
+      name: 'Extended Leave (Unpaid)',
       icon: <Clock size={26} />,
       color: '#0284c7',
-      balance: userBalances?.EXTENDED || { remaining: 30, used: 0, total: 30 },
-      description: 'Longer absence leaves beyond 3 days. Exempt from consecutive day limit.'
+      isUnpaid: true,
+      balance: userBalances?.EXTENDED || { remaining: 0, used: 0, total: 0 },
+      description: 'Longer absence leaves beyond 3 days under special circumstances. No fixed day limit. Approved days are unpaid (Salary Deducted).'
     },
   ];
 
@@ -70,14 +71,20 @@ export const EmployeeApplyLeave = ({ currentUser, userBalances, onRefresh, showT
             <div className="leave-type-icon" style={{ color: lt.color }}>{lt.icon}</div>
             <div className="leave-type-info">
               <h3>{lt.name}</h3>
-              <p className="leave-type-balance">
-                <strong>{lt.balance?.remaining ?? 0}</strong> days available of {lt.balance?.total ?? 0}
-              </p>
+              {lt.isUnpaid ? (
+                <p className="leave-type-balance">
+                  <strong style={{ color: '#0284c7' }}>No Fixed Limit</strong> · <span style={{ fontSize: '0.8rem', color: '#92400e', fontWeight: 600 }}>Unpaid (Salary Deducted)</span>
+                </p>
+              ) : (
+                <p className="leave-type-balance">
+                  <strong>{lt.balance?.remaining ?? 0}</strong> days available of {lt.balance?.total ?? 0}
+                </p>
+              )}
               <div className="leave-type-bar" style={{ marginTop: 8, marginBottom: 8 }}>
                 <div
                   className="leave-type-bar-fill"
                   style={{
-                    width: `${Math.min(100, ((lt.balance?.used ?? 0) / (lt.balance?.total ?? 1)) * 100)}%`,
+                    width: lt.isUnpaid ? '100%' : `${Math.min(100, ((lt.balance?.used ?? 0) / (lt.balance?.total ?? 1)) * 100)}%`,
                     background: lt.color
                   }}
                 />

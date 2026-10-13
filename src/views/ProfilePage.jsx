@@ -217,7 +217,7 @@ export const ProfilePage = ({ currentUser, userBalances, onLogout }) => {
               <div>
                 <strong style={{ fontSize: '0.88rem', color: '#c2410c' }}>Consecutive Normal Leave Cap</strong>
                 <p style={{ margin: '3px 0 0', fontSize: '0.81rem', color: '#9a3412', lineHeight: 1.4 }}>
-                  Normal leave is limited to a maximum of <strong>3 consecutive working days</strong> per application. Absences exceeding 3 days require <strong>Extended Leave</strong>.
+                  Normal leave is limited to a maximum of <strong>3 consecutive working days</strong> per application. Absences exceeding 3 days require <strong>Extended Leave (Unpaid)</strong> with salary deduction upon approval.
                 </p>
               </div>
             </div>
@@ -258,9 +258,9 @@ export const ProfilePage = ({ currentUser, userBalances, onLogout }) => {
                 padding: '10px 12px',
                 textAlign: 'center'
               }}>
-                <span style={{ fontSize: '0.74rem', color: 'var(--text-tertiary, #94a3b8)', display: 'block' }}>Extended Leave</span>
-                <strong style={{ fontSize: '1.15rem', color: '#0284c7' }}>{extendedBal.remaining}d</strong>
-                <span style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', display: 'block', marginTop: 2 }}>of {extendedBal.total}d total</span>
+                <span style={{ fontSize: '0.74rem', color: 'var(--text-tertiary, #94a3b8)', display: 'block' }}>Extended (Unpaid)</span>
+                <strong style={{ fontSize: '1.15rem', color: '#0284c7' }}>{extendedBal.used || 0}d taken</strong>
+                <span style={{ fontSize: '0.72rem', color: '#92400e', display: 'block', marginTop: 2, fontWeight: 600 }}>Unpaid (Salary Deducted)</span>
               </div>
             </div>
           </div>

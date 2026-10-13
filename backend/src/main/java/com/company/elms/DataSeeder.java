@@ -410,9 +410,9 @@ public class DataSeeder implements CommandLineRunner {
         LeaveBalance extended = LeaveBalance.builder()
                 .user(user)
                 .leaveType("EXTENDED")
-                .total(30.0)
+                .total(0.0)
                 .used(0.0)
-                .remaining(30.0)
+                .remaining(0.0)
                 .build();
 
         leaveBalanceRepository.saveAll(Arrays.asList(normal, medical, extended));

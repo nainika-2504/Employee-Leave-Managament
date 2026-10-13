@@ -501,6 +501,7 @@ export const ManagerDashboard = ({ users = [], allApplications = [], onApprove, 
                       <th style={{ padding: 8 }}>Category</th>
                       <th style={{ padding: 8 }}>Dates</th>
                       <th style={{ padding: 8 }}>Days</th>
+                      <th style={{ padding: 8 }}>Certificate</th>
                       <th style={{ padding: 8 }}>Status</th>
                     </tr>
                   </thead>
@@ -512,6 +513,15 @@ export const ManagerDashboard = ({ users = [], allApplications = [], onApprove, 
                         <td style={{ padding: 8 }}>{r.leaveTypeName || r.leaveType}</td>
                         <td style={{ padding: 8 }}>{r.startDate} to {r.endDate}</td>
                         <td style={{ padding: 8 }}>{r.halfDay ? '0.5' : r.daysCount}</td>
+                        <td style={{ padding: 8 }}>
+                          {r.medicalCertificate ? (
+                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, color: '#166534', fontSize: '0.75rem', fontWeight: 600 }}>
+                              <FileText size={12} /> {r.medicalCertificate}
+                            </span>
+                          ) : (
+                            <span style={{ color: '#94a3b8', fontSize: '0.75rem' }}>—</span>
+                          )}
+                        </td>
                         <td style={{ padding: 8 }}>
                           <span style={{
                             padding: '2px 8px',

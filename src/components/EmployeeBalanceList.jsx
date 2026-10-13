@@ -12,8 +12,8 @@ export const EmployeeBalanceList = ({ users, allBalances }) => {
             <th>Department</th>
             <th>Normal Leave (10d accrued)</th>
             <th>Medical Leave (10d)</th>
-            <th>Extended Leave (30d)</th>
-            <th>Total Days Remaining</th>
+            <th>Extended (Unpaid)</th>
+            <th>Paid Days Remaining</th>
           </tr>
         </thead>
         <tbody>
@@ -21,15 +21,14 @@ export const EmployeeBalanceList = ({ users, allBalances }) => {
             const userBal = allBalances[emp.id] || {
               NORMAL: { remaining: 8, used: 2, total: 10 },
               MEDICAL: { remaining: 9, used: 1, total: 10 },
-              EXTENDED: { remaining: 30, used: 0, total: 30 }
+              EXTENDED: { remaining: 0, used: 0, total: 0 }
             };
 
             const normUsed = userBal.NORMAL?.used ?? 2;
             const normRemaining = Math.max(0, 10 - normUsed);
             const medRemaining = userBal.MEDICAL?.remaining ?? 9;
-            const extRemaining = userBal.EXTENDED?.remaining ?? 30;
 
-            const totalRemaining = normRemaining + medRemaining + extRemaining;
+            const totalRemaining = normRemaining + medRemaining;
 
             const joinDate = emp.joiningDate ? new Date(emp.joiningDate).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' }) : (
               emp.id === 1 || emp.email?.includes('nainika') ? '15 Jan 2024' :
@@ -55,8 +54,8 @@ export const EmployeeBalanceList = ({ users, allBalances }) => {
                   <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginLeft: 6 }}>({userBal.MEDICAL?.used ?? 0} used)</span>
                 </td>
                 <td>
-                  <span style={{ fontWeight: 600, color: '#0284c7' }}>{userBal.EXTENDED?.remaining ?? 30} Left</span>
-                  <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginLeft: 6 }}>({userBal.EXTENDED?.used ?? 0} used)</span>
+                  <span style={{ fontWeight: 600, color: '#0284c7' }}>{userBal.EXTENDED?.used ?? 0}d Taken</span>
+                  <span style={{ fontSize: '0.75rem', color: '#92400e', marginLeft: 6, fontWeight: 500 }}>(Unpaid / LOP)</span>
                 </td>
                 <td>
                   <span style={{

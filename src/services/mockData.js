@@ -53,7 +53,7 @@ export const INITIAL_USERS = [
 export const LEAVE_TYPES = [
   { id: 'NORMAL', name: 'Normal Leave', defaultTotal: 10, color: '#4f46e5', maxConsecutiveDays: 3 },
   { id: 'MEDICAL', name: 'Medical Leave', defaultTotal: 10, color: '#059669' },
-  { id: 'EXTENDED', name: 'Extended Leave', defaultTotal: 30, color: '#0284c7' }
+  { id: 'EXTENDED', name: 'Extended Leave (Unpaid)', isUnpaid: true, defaultTotal: 0, color: '#0284c7' }
 ];
 
 export const INITIAL_BALANCES = {

@@ -118,7 +118,7 @@ export const ReportGenerator = ({ allApplications = [], users = [], allBalances 
               <option value="ALL">All Types</option>
               <option value="NORMAL">Normal Leave</option>
               <option value="MEDICAL">Medical Leave</option>
-              <option value="EXTENDED">Extended Leave</option>
+              <option value="EXTENDED">Extended Leave (Unpaid)</option>
             </select>
           </div>
           <div className="form-group" style={{ margin: 0 }}>

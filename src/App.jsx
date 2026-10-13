@@ -359,11 +359,30 @@ export function App() {
                   </div>
                 )}
 
+                {/* Extended Leave (Unpaid) Warning */}
+                {reviewApp.leaveType === 'EXTENDED' && (
+                  <div style={{ background: '#fffbeb', border: '1px solid #fde68a', padding: '10px 14px', borderRadius: 8, marginBottom: 14, color: '#92400e', fontSize: '0.82rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontWeight: 700, marginBottom: 2 }}>
+                      <AlertTriangle size={15} style={{ color: '#d97706' }} /> Unpaid Absence (Loss of Pay)
+                    </div>
+                    <span>Approving this request authorizes unpaid leave with <strong>proportional salary deduction</strong> for {reviewApp.daysCount} working day(s).</span>
+                  </div>
+                )}
+
                 {/* Medical Certificate Review if attached */}
                 {reviewApp.medicalCertificate && (
                   <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', padding: '10px 14px', borderRadius: 8, marginBottom: 14, fontSize: '0.82rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontWeight: 700, color: '#166534', marginBottom: 4 }}>
-                      <FileText size={15} /> Supporting Evidence Attached
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontWeight: 700, color: '#166534' }}>
+                        <FileText size={15} /> Supporting Evidence Attached
+                      </div>
+                      <a
+                        href={`data:text/plain;charset=utf-8,${encodeURIComponent(`Medical Certificate: ${reviewApp.medicalCertificate}\nEmployee: ${reviewApp.userName}\nDates: ${reviewApp.startDate} to ${reviewApp.endDate}\nReason: ${reviewApp.reason}`)}`}
+                        download={reviewApp.medicalCertificate || 'certificate.txt'}
+                        style={{ fontSize: '0.74rem', color: '#15803d', fontWeight: 600, textDecoration: 'underline', cursor: 'pointer' }}
+                      >
+                        Download
+                      </a>
                     </div>
                     <div>File: <strong>{reviewApp.medicalCertificate}</strong></div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6 }}>
@@ -412,7 +431,7 @@ export function App() {
                   <li><strong>Normal Leave (Annual/Casual):</strong> Maximum 3 consecutive working days.</li>
                   <li><strong>Half-Day Leave:</strong> Deducts 0.5 days (Morning / Afternoon).</li>
                   <li><strong>Sick/Medical Leave:</strong> Allows retroactive dates with late reason &amp; certificate.</li>
-                  <li><strong>Extended Leave:</strong> Exempt from 3-day consecutive limit; draws from Extended quota (30d).</li>
+                  <li><strong>Extended Leave (Unpaid):</strong> Exempt from 3-day consecutive limit; no fixed day cap under certain circumstances. Subject to approval &amp; proportional salary deduction.</li>
                   <li><strong>Maternity Leave:</strong> Statutory entitlement (180 days).</li>
                 </ul>
               </div>
